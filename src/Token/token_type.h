@@ -16,8 +16,6 @@ enum class Token_type {
   BREAK, CONTINUE,
 
   NEOF
-
-
 };
 
 #endif // !TOKEN_TYPE_H
