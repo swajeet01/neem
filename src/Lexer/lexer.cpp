@@ -1,3 +1,4 @@
+#include <cctype>
 #include <string>
 #include <vector>
 #include <memory>
@@ -37,6 +38,11 @@ char Lexer::peek() {
   return source[current];
 }
 
+char Lexer::peek_next() {
+  if (current + 1 >= source.size()) return '\0';
+  return source[current + 1];
+}
+
 bool Lexer::match(char expected) {
   if (is_at_end()) return false;
   if (source[current] != expected) return false;
@@ -70,10 +76,24 @@ void Lexer::string_tk() {
   add_token(Token_type::STRING, 0);
 }
 
+void Lexer::number() {
+  while (isdigit(peek())) advance();
+  
+  if (peek() == '.' && isdigit(peek_next())) {
+    // Consume '.'.
+    advance();
+
+    while (isdigit(peek())) advance();
+  }
+
+  add_token(Token_type::NUMBER, 0);
+  
+}
+
 void Lexer::get_token() {
   char c = advance();
   switch (c) {
-    // Single character tokens
+    // Single character tokens.
     case '{': add_token(Token_type::LEFT_BRACE); break;
     case '}': add_token(Token_type::RIGHT_BRACE); break;
     case '(': add_token(Token_type::LEFT_PAREN); break;
@@ -88,7 +108,7 @@ void Lexer::get_token() {
     case '*': add_token(Token_type::STAR); break;
     case ';': add_token(Token_type::SEMI_COL); break;
 
-    // Two character tokens
+    // Two character tokens.
     case '!':
       add_token(match('=') ? Token_type::BANG_EQ : Token_type::BANG);
       break;
@@ -102,7 +122,7 @@ void Lexer::get_token() {
       add_token(match('=') ? Token_type::LESSER_EQ : Token_type::LESSER);
       break;
     
-    // Multi character tokens
+    // Multi character tokens.
     case '%':
       if (match('%')) {
         while (peek() != common::newl && !is_at_end()) advance();
@@ -111,7 +131,7 @@ void Lexer::get_token() {
       }
       break;
     
-    // Whitespace
+    // Whitespace.
     case ' ':
     case '\r':
     case '\t':
@@ -124,7 +144,11 @@ void Lexer::get_token() {
     case '"': string_tk(); break;
     
     default:
-      error_reporter->error(line, "Unexpected character.");
+      if (isdigit(c)) {
+        number();
+      } else {
+        error_reporter->error(line, "Unexpected character.");
+      }
       break;
   }
 }
