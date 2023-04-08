@@ -6,13 +6,14 @@
 
 void Lexer_error_reporter::error(int line, std::string message) {
   // TODO: Generate location
+  fhad_error = true;
   report(line, "", message);
 }
 
 void Lexer_error_reporter::report(int line, std::string where,
     std::string message) {
   // Temp message
-  std::cout << line << " Error: " << message << common::newl;
+  std::cerr << line << " Error: " << message << common::newl;
 }
 
 bool Lexer_error_reporter::had_error() {

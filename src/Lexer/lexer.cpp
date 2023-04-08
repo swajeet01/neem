@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 
+#include "../common.h"
 #include "lexer.h"
 #include "../Token/token.h"
 #include "../Token/token_type.h"
@@ -30,6 +31,18 @@ void Lexer::add_token(Token_type type, int) {
   tokens.push_back(Token(lexeme, line, type));
 }
 
+char Lexer::peek() {
+  if (is_at_end()) return common::null;
+  return source[current];
+}
+
+bool Lexer::match(char expected) {
+  if (is_at_end()) return false;
+  if (source[current] != expected) return false;
+  current++;
+  return true;
+}
+
 void Lexer::get_token() {
   char c = advance();
   switch (c) {
@@ -46,6 +59,25 @@ void Lexer::get_token() {
     case '/': add_token(Token_type::SLASH); break;
     case '*': add_token(Token_type::STAR); break;
     case ';': add_token(Token_type::SEMI_COL); break;
+    case '!':
+      add_token(match('=') ? Token_type::BANG_EQ : Token_type::BANG);
+      break;
+    case '=':
+      add_token(match('=') ? Token_type::EQ_EQ : Token_type::EQ);
+      break;
+    case '<':
+      add_token(match('=') ? Token_type::GREATER_EQ : Token_type::GREATER);
+      break;
+    case '>':
+      add_token(match('=') ? Token_type::LESSER_EQ : Token_type::LESSER);
+      break;
+    case '%':
+      if (match('%')) {
+        while (peek() != common::newl && !is_at_end()) advance();
+      } else {
+        add_token(Token_type::MOD);
+      }
+      break;
     default:
       error_reporter->error(line, "Unexpected character.");
       break;

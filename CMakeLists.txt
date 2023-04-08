@@ -8,6 +8,7 @@ add_library(lexer_error_reporter STATIC
   src/Error/lexer_error_reporter.cpp)
 
 add_library(lexer STATIC
+  src/common.h
   src/Lexer/lexer.h
   src/Token/token.h
   src/Token/token_type.h
