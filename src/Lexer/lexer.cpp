@@ -46,6 +46,7 @@ bool Lexer::match(char expected) {
 void Lexer::get_token() {
   char c = advance();
   switch (c) {
+    // Single character tokens
     case '{': add_token(Token_type::LEFT_BRACE); break;
     case '}': add_token(Token_type::RIGHT_BRACE); break;
     case '(': add_token(Token_type::LEFT_PAREN); break;
@@ -59,6 +60,7 @@ void Lexer::get_token() {
     case '/': add_token(Token_type::SLASH); break;
     case '*': add_token(Token_type::STAR); break;
     case ';': add_token(Token_type::SEMI_COL); break;
+    // Two character tokens
     case '!':
       add_token(match('=') ? Token_type::BANG_EQ : Token_type::BANG);
       break;
@@ -71,12 +73,19 @@ void Lexer::get_token() {
     case '>':
       add_token(match('=') ? Token_type::LESSER_EQ : Token_type::LESSER);
       break;
+    // Multi character tokens
     case '%':
       if (match('%')) {
         while (peek() != common::newl && !is_at_end()) advance();
       } else {
         add_token(Token_type::MOD);
       }
+      break;
+    // Whitespace
+    case common::spac:
+    case common::newl:
+    case common::tabc:
+      // Ignore
       break;
     default:
       error_reporter->error(line, "Unexpected character.");
