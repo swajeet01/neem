@@ -1,12 +1,16 @@
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "lexer.h"
 #include "../Token/token.h"
 #include "../Token/token_type.h"
+#include "../Error/error_reporter.h"
 
-Lexer::Lexer(const std::string psource):
-    source {psource} {}
+Lexer::Lexer(const std::string psource,
+    std::shared_ptr<Error_reporter> perror_reporter):
+    source {psource},
+    error_reporter {perror_reporter} {}
 
 inline bool Lexer::is_at_end() {
   return current >= source.size();
@@ -21,7 +25,7 @@ void Lexer::add_token(Token_type type) {
   add_token(type, 0);
 }
 
-void Lexer::add_token(Token_type type, int hack) {
+void Lexer::add_token(Token_type type, int) {
   auto lexeme = source.substr(start, current - start); // Already 1 char ahead.
   tokens.push_back(Token(lexeme, line, type));
 }
@@ -42,7 +46,9 @@ void Lexer::get_token() {
     case '/': add_token(Token_type::SLASH); break;
     case '*': add_token(Token_type::STAR); break;
     case ';': add_token(Token_type::SEMI_COL); break;
-    default: break;
+    default:
+      error_reporter->error(line, "Unexpected character.");
+      break;
   }
 }
 

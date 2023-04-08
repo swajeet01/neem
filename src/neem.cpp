@@ -1,16 +1,26 @@
 #include <iostream>
+#include <memory>
 #include <string>
 #include <fstream>
 
+#include "Error/error_reporter.h"
+#include "Error/lexer_error_reporter.h"
 #include "common.h"
 #include "Lexer/lexer.h"
 #include "Parser/parser.h"
 
 void run(const std::string source) {
-  Lexer lexer {source};
+
+  std::shared_ptr<Error_reporter> lexer_error_reporter =
+      std::make_shared<Lexer_error_reporter>();
+  Lexer lexer {source, lexer_error_reporter};
   auto tokens = lexer.get_tokens();
-  Parser parser {tokens};
-  parser.parse();
+  for (auto token: tokens) {
+    std::cout << token.to_string() << common::newl;
+  }
+
+  // Parser parser {tokens};
+  // parser.parse();
 }
 
 void run_prompt() {
