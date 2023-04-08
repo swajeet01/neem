@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <iostream>
 
 #include "../common.h"
 #include "lexer.h"
@@ -32,7 +33,7 @@ void Lexer::add_token(Token_type type, int) {
 }
 
 char Lexer::peek() {
-  if (is_at_end()) return common::null;
+  if (is_at_end()) return '\0';
   return source[current];
 }
 
@@ -41,6 +42,32 @@ bool Lexer::match(char expected) {
   if (source[current] != expected) return false;
   current++;
   return true;
+}
+
+void Lexer::string_tk() {
+  while (peek() != '"' && !is_at_end()) {
+    // Allow multiline strings
+    if (peek() == '\n') line++;
+    
+    // if (peek() == '\n') {
+    //  error_reporter->error(line, "Unterminated string literal.");
+    //  return;
+    // }
+    advance();
+  }
+
+  // If allowing multiline strings
+  if (is_at_end()) {
+    error_reporter->error(line, "Unterminated string literal.");
+    return;
+  } 
+
+  // Closing ".
+  advance();
+  
+  auto value = source.substr(start + 1, current - start - 2);
+  // TODO: Implement escape sequences.
+  add_token(Token_type::STRING, 0);
 }
 
 void Lexer::get_token() {
@@ -60,6 +87,7 @@ void Lexer::get_token() {
     case '/': add_token(Token_type::SLASH); break;
     case '*': add_token(Token_type::STAR); break;
     case ';': add_token(Token_type::SEMI_COL); break;
+
     // Two character tokens
     case '!':
       add_token(match('=') ? Token_type::BANG_EQ : Token_type::BANG);
@@ -73,6 +101,7 @@ void Lexer::get_token() {
     case '>':
       add_token(match('=') ? Token_type::LESSER_EQ : Token_type::LESSER);
       break;
+    
     // Multi character tokens
     case '%':
       if (match('%')) {
@@ -81,12 +110,19 @@ void Lexer::get_token() {
         add_token(Token_type::MOD);
       }
       break;
+    
     // Whitespace
-    case common::spac:
-    case common::newl:
-    case common::tabc:
+    case ' ':
+    case '\r':
+    case '\t':
       // Ignore
       break;
+    case '\n':
+      line++;
+      break;
+
+    case '"': string_tk(); break;
+    
     default:
       error_reporter->error(line, "Unexpected character.");
       break;

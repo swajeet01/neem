@@ -17,6 +17,7 @@ class Lexer {
   size_t line {1};
   char peek();
   bool match(char);
+  void string_tk();
   void get_token();
   void add_token(Token_type);
   void add_token(Token_type, int); // Temporary param int
