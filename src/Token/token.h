@@ -6,6 +6,8 @@
 class Token {
   std::string lexeme;
   int line;
+public:
+  Token(const std::string, int);
 };
 
 #endif // !TOKEN_H

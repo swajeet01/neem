@@ -19,7 +19,7 @@ void run_prompt() {
     std::cout << "> ";
     std::getline(std::cin, line);
     if (!std::cin) break;
-    run(std::move(line));
+    run(line);
   }
   std::cout << "Bye!" << common::newl;
 }
@@ -35,7 +35,7 @@ void run_file(const char* filename) {
       std::istreambuf_iterator<char> {in_file},
       std::istreambuf_iterator<char> {}
   };
-  run(std::move(file_content));
+  run(file_content);
 }
 
 int main(int argc, char* argv[]) {

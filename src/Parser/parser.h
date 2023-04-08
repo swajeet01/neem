@@ -1,17 +1,15 @@
-
 #ifndef PARSER_H
 #define PARSER_H
 
 #include <vector>
+
 #include "../Token/token.h"
 
 class Parser {
-  std::vector<Token> mtokens;
+  std::vector<Token> tokens;
 
 public:
-  Parser(const std::vector<Token> tokens):
-    mtokens {tokens} {}
-
+  Parser(const std::vector<Token>);
   void parse();
 };
 

@@ -7,12 +7,10 @@
 #include "../Token/token.h"
 
 class Lexer {
-  std::string msource;
+  std::string source;
 
 public:
-  Lexer(const std::string source):
-  msource {source} {}
-
+  Lexer(const std::string);
   std::vector<Token> get_tokens();
 };
 
