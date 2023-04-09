@@ -1,5 +1,6 @@
 #include <cctype>
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include <memory>
 #include <iostream>
@@ -9,6 +10,24 @@
 #include "../Token/token.h"
 #include "../Token/token_type.h"
 #include "../Error/error_reporter.h"
+
+static const std::unordered_map<std::string, Token_type> keywords {
+  {"let", Token_type::LET},
+  {"true", Token_type::NTRUE},
+  {"false", Token_type::NFALSE},
+  {"and", Token_type::AND},
+  {"or", Token_type::OR},
+  {"if", Token_type::IF},
+  {"else", Token_type::ELSE},
+  {"fn", Token_type::FN},
+  {"while", Token_type::WHILE},
+  {"for", Token_type::FOR},
+  {"in", Token_type::IN},
+  {"struct", Token_type::STRUCT},
+  {"this", Token_type::THIS},
+  {"break", Token_type::BREAK},
+  {"continue", Token_type::CONTINUE}
+};
 
 Lexer::Lexer(const std::string psource,
     std::shared_ptr<Error_reporter> perror_reporter):
@@ -90,6 +109,16 @@ void Lexer::number() {
   
 }
 
+void Lexer::identifier() {
+  while (isalnum(peek()) || peek() == '_') advance();
+  auto text {source.substr(start, current - start)};
+  if (keywords.find(text) != keywords.end()) {
+    add_token(keywords.at(text));
+  } else {
+    add_token(Token_type::IDENTIFIER);
+  }
+}
+
 void Lexer::get_token() {
   char c = advance();
   switch (c) {
@@ -146,6 +175,8 @@ void Lexer::get_token() {
     default:
       if (isdigit(c)) {
         number();
+      } else if (isalpha(c)) {
+        identifier();
       } else {
         error_reporter->error(line, "Unexpected character.");
       }

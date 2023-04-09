@@ -20,6 +20,7 @@ class Lexer {
   bool match(char);
   void string_tk();
   void number();
+  void identifier();
   void get_token();
   void add_token(Token_type);
   void add_token(Token_type, int); // Temporary param int
