@@ -10,6 +10,7 @@
 #include "../Token/token.h"
 #include "../Token/token_type.h"
 #include "../Error/error_reporter.h"
+#include "../Variant/literal.h"
 
 static const std::unordered_map<std::string, Token_type> keywords {
   {"let", Token_type::LET},
@@ -44,12 +45,12 @@ char Lexer::advance() {
 }
 
 void Lexer::add_token(Token_type type) {
-  add_token(type, 0);
+  add_token(type, Literal {});
 }
 
-void Lexer::add_token(Token_type type, int) {
+void Lexer::add_token(Token_type type, Literal literal) {
   auto lexeme = source.substr(start, current - start); // Already 1 char ahead.
-  tokens.push_back(Token(lexeme, line, type));
+  tokens.push_back(Token(lexeme, line, type, literal));
 }
 
 char Lexer::peek() {
@@ -92,7 +93,8 @@ void Lexer::string_tk() {
   
   auto value = source.substr(start + 1, current - start - 2);
   // TODO: Implement escape sequences.
-  add_token(Token_type::STRING, 0);
+  Literal str_literal {Literal_type::String, value};
+  add_token(Token_type::STRING, str_literal);
 }
 
 void Lexer::number() {
@@ -104,9 +106,10 @@ void Lexer::number() {
 
     while (isdigit(peek())) advance();
   }
-
-  add_token(Token_type::NUMBER, 0);
-  
+  auto str_rep = source.substr(start, current - start);
+  auto value = std::stod(str_rep);
+  Literal num_literal {Literal_type::Number, value};
+  add_token(Token_type::NUMBER, num_literal);
 }
 
 void Lexer::identifier() {
@@ -189,6 +192,6 @@ std::vector<Token> Lexer::get_tokens() {
     start = current;
     get_token();
   }
-  tokens.push_back(Token(std::string {"EOF"}, line, Token_type::NEOF));
+  tokens.push_back(Token(std::string {"EOF"}, line, Token_type::NEOF, Literal {}));
   return tokens;
 }

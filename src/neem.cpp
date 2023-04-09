@@ -15,6 +15,9 @@ void run(const std::string source) {
       std::make_shared<Lexer_error_reporter>();
   Lexer lexer {source, lexer_error_reporter};
   auto tokens = lexer.get_tokens();
+  for (auto token : tokens) {
+    std::cout << token.to_string() << common::newl;
+  }
   // Parser parser {tokens};
   // parser.parse();
 }
