@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 project(neem LANGUAGES CXX)
 
-add_library(lexer_error_reporter STATIC
+add_library(lexer_error_reporter OBJECT
   src/common.h
   src/Error/lexer_error_reporter.h
   src/Error/lexer_error_reporter.cpp)
 
-add_library(lexer STATIC
+add_library(lexer OBJECT
   src/common.h
   src/Lexer/lexer.h
   src/Token/token.h
@@ -15,7 +15,7 @@ add_library(lexer STATIC
   src/Error/error_reporter.h
   src/Lexer/lexer.cpp)
 
-add_library(token STATIC
+add_library(token OBJECT
   src/common.h
   src/Token/token.h
   src/Token/token_type.h
