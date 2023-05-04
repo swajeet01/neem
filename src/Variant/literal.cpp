@@ -57,3 +57,20 @@ void Literal::put_number(double data) {
   type = Literal_type::Number;
   num = data;
 }
+
+std::string Literal::to_string() {
+  switch (type) {
+    case Literal_type::None:
+      return "nil";
+      break; // lol
+    case Literal_type::Number:
+      return std::to_string(num);
+      break;
+    case Literal_type::String:
+      return str;
+      break;
+    default:
+      return "";
+      break;
+  }
+}

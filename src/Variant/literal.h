@@ -18,6 +18,7 @@ public:
   double get_number();
   void put_string(std::string);
   void put_number(double);
+  std::string to_string();
 };
 
 #endif // !LITERAL_H

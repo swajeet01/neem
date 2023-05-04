@@ -1,6 +1,7 @@
 #ifndef AST_PRINTER_H
 #define AST_PRINTER_H
 
+#include <initializer_list>
 #include <string>
 #include <memory>
 
@@ -14,6 +15,8 @@ struct Ast_printer: public Mutable_state_visitor {
   void visit(Unary&);
   void visit(Grouping&);
   void visit(Ast_literal&);
+  std::string parenthesize(std::string,
+      std::initializer_list<std::shared_ptr<Expr>>);
 };
 
 
