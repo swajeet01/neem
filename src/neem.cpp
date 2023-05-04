@@ -10,7 +10,6 @@
 #include "Parser/parser.h"
 
 void run(const std::string source) {
-
   std::shared_ptr<Error_reporter> lexer_error_reporter =
       std::make_shared<Lexer_error_reporter>();
   Lexer lexer {source, lexer_error_reporter};

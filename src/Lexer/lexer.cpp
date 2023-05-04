@@ -27,7 +27,9 @@ static const std::unordered_map<std::string, Token_type> keywords {
   {"struct", Token_type::STRUCT},
   {"this", Token_type::THIS},
   {"break", Token_type::BREAK},
-  {"continue", Token_type::CONTINUE}
+  {"continue", Token_type::CONTINUE},
+  {"return", Token_type::RETURN},
+  {"nil", Token_type::NIL}
 };
 
 Lexer::Lexer(const std::string psource,
