@@ -47,10 +47,10 @@ char Lexer::advance() {
 }
 
 void Lexer::add_token(Token_type type) {
-  add_token(type, Literal {});
+  add_token(type, std::make_shared<Literal>());
 }
 
-void Lexer::add_token(Token_type type, Literal literal) {
+void Lexer::add_token(Token_type type, std::shared_ptr<Literal> literal) {
   auto lexeme = source.substr(start, current - start); // Already 1 char ahead.
   tokens.push_back(Token(lexeme, line, type, literal));
 }
@@ -95,7 +95,7 @@ void Lexer::string_tk() {
   
   auto value = source.substr(start + 1, current - start - 2);
   // TODO: Implement escape sequences.
-  Literal str_literal {Literal_type::String, value};
+  auto str_literal = std::make_shared<Literal>(Literal_type::String, value);
   add_token(Token_type::STRING, str_literal);
 }
 
@@ -110,7 +110,8 @@ void Lexer::number() {
   }
   auto str_rep = source.substr(start, current - start);
   auto value = std::stod(str_rep);
-  Literal num_literal {Literal_type::Number, value};
+  // Literal num_literal {Literal_type::Number, value};
+  auto num_literal = std::make_shared<Literal>(Literal_type::Number, value);
   add_token(Token_type::NUMBER, num_literal);
 }
 
@@ -194,6 +195,7 @@ std::vector<Token> Lexer::get_tokens() {
     start = current;
     get_token();
   }
-  tokens.push_back(Token(std::string {"EOF"}, line, Token_type::NEOF, Literal {}));
+  tokens.push_back(Token(std::string {"EOF"}, line, Token_type::NEOF,
+      std::make_shared<Literal>()));
   return tokens;
 }

@@ -56,7 +56,8 @@ int main(int argc, char* argv[]) {
     std::make_shared<Ast_literal>(
       std::make_shared<Literal>(Literal_type::Number, 10.0)
     ),
-    std::make_shared<Token>(std::string {"+"}, 10, Token_type::PLUS, Literal()),
+    std::make_shared<Token>(std::string {"+"}, 10, Token_type::PLUS,
+      std::make_shared<Literal>()),
     std::make_shared<Ast_literal>(
       std::make_shared<Literal>(Literal_type::Number, 20.0)
     )
