@@ -39,6 +39,10 @@ add_library(ast_printer OBJECT
   src/Visitor/ast_printer.h
   src/Visitor/ast_printer.cpp)
 
+add_executable(ast_printer_test src/ast_printer_test.cpp)
+
+target_link_libraries(ast_printer_test expr literal token ast_printer)
+
 add_executable(neem src/neem.cpp)
 
 target_link_libraries(neem expr literal lexer_error_reporter lexer token ast_printer)
