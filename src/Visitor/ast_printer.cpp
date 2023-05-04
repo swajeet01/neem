@@ -1,3 +1,4 @@
+#include <iostream>
 #include <memory>
 #include <string>
 
@@ -6,6 +7,7 @@
 
 std::string Ast_printer::print(std::shared_ptr<Expr> expr) {
   expr->accept(*this);
+  std::cout << data << "\n";
   return data;
 }
 

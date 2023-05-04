@@ -6,10 +6,10 @@
 #include <memory>
 
 struct Mutable_state_visitor {
-  void visit(Binary&) = 0;
-  void visit(Unary&) = 0;
-  void visit(Grouping&) = 0;
-  void visit(Ast_literal&) = 0;
+  virtual void visit(Binary&) = 0;
+  virtual void visit(Unary&) = 0;
+  virtual void visit(Grouping&) = 0;
+  virtual void visit(Ast_literal&) = 0;
 };
 
 #endif // !MUTABLE_STATE_VISITOR_H

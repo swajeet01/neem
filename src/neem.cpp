@@ -3,8 +3,13 @@
 #include <string>
 #include <fstream>
 
+#include "Ast/expr_fwd.h"
 #include "Error/error_reporter.h"
 #include "Error/lexer_error_reporter.h"
+#include "Token/token.h"
+#include "Token/token_type.h"
+#include "Variant/literal.h"
+#include "Visitor/ast_printer.h"
 #include "common.h"
 #include "Lexer/lexer.h"
 #include "Parser/parser.h"
@@ -47,6 +52,18 @@ void run_file(const char* filename) {
 }
 
 int main(int argc, char* argv[]) {
+  auto expr = std::make_shared<Binary>(
+    std::make_shared<Ast_literal>(
+      std::make_shared<Literal>(Literal_type::Number, 10.0)
+    ),
+    std::make_shared<Token>(std::string {"+"}, 10, Token_type::PLUS, Literal()),
+    std::make_shared<Ast_literal>(
+      std::make_shared<Literal>(Literal_type::Number, 20.0)
+    )
+  );
+  Ast_printer ast_printer;
+  ast_printer.print(expr);
+  return 0;
   if (argc == 1) {
     run_prompt();
   } else if (argc == 2) {

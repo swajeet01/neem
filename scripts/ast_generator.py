@@ -76,6 +76,7 @@ def generate_class_decl(klass, base, writer):
             "(" + parameters + ");")
     writer.writeln(tabs(1) + "void accept(Mutable_state_visitor&);")
     writer.writeln("};")
+    writer.emmit_blank()
 
 def generate_header_file(klasses, base, writer):
     writer.writeln("#ifndef " + base.upper() + "_H")
