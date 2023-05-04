@@ -40,18 +40,14 @@ def read_classes(desc_file):
     return klasses
 
 class Writer:
-    def __init__(self, filename):
-        self.file = open(filename, "w")
+    def __init__(self, file):
+        self.file = file
 
     def writeln(self, line = ""):
         self.file.write(line + "\n")
 
     def emmit_blank(self):
         self.file.write("\n")
-
-    def close(self):
-        self.file.close()
-        self.file = None
 
 def tabs(n):
     return "\t" * n
@@ -135,18 +131,21 @@ def main():
     klasses = read_classes(desc_file)
     
     fwd_filename = output_dir + "/" + base.lower() + "_fwd.h"
-    writer = Writer(fwd_filename)
+    file = open(fwd_filename, "w")
+    writer = Writer(file)
     generate_fwd_declarations_file(klasses, base, writer)
-    writer.close()
+    file.close()
     
     header_filename = output_dir + "/" + base.lower() + ".h"
-    writer = Writer(header_filename)
+    file = open(header_filename, "w")
+    writer = Writer(file)
     generate_header_file(klasses, base, writer)
-    writer.close()
+    file.close()
     
     impl_filename = output_dir + "/" + base.lower() + ".cpp"
-    writer = Writer(impl_filename)
+    file = open(impl_filename, "w")
+    writer = Writer(file)
     generate_impl_file(klasses, base, writer)
-    writer.close()
+    file.close()
 
 main()
