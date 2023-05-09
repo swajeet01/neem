@@ -8,12 +8,12 @@
 #include "../Variant/literal.h"
 
 class Token {
-  int line;
-  Token_type type;
-  std::shared_ptr<Literal> literal;
 public:
-  std::string lexeme;
   Token(const std::string, int, Token_type, std::shared_ptr<Literal>);
+  int line;
+  std::shared_ptr<Literal> literal;
+  Token_type type;
+  std::string lexeme;
   std::string to_string();
 };
 

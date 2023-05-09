@@ -23,7 +23,7 @@ int main() {
         std::make_shared<Literal>()
       ),
       std::make_shared<Ast_literal>(
-        std::make_shared<Literal>(Literal_type::Number, 123)
+        std::make_shared<Literal>(Literal_type::Number, 123.0)
       )
     ),
     std::make_shared<Token>(std::string {"*"}, 4, Token_type::STAR,

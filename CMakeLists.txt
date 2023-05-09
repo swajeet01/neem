@@ -14,6 +14,15 @@ add_library(lexer_error_reporter OBJECT
   src/Error/lexer_error_reporter.h
   src/Error/lexer_error_reporter.cpp)
 
+add_library(parse_error OBJECT
+  src/Error/parse_error.h
+  src/Error/parse_error.cpp)
+
+add_library(parser_error_reporter OBJECT
+  src/common.h
+  src/Error/parser_error_reporter.h
+  src/Error/parser_error_reporter.cpp)
+
 add_library(lexer OBJECT
   src/common.h
   src/Lexer/lexer.h
@@ -23,9 +32,11 @@ add_library(lexer OBJECT
   src/Variant/literal.h
   src/Lexer/lexer.cpp)
 
-add_library(literal OBJECT
-  src/Variant/literal.h
-  src/Variant/literal.cpp)
+add_library(parser OBJECT
+  src/Token/token.h
+  src/Ast/expr.h
+  src/Parser/parser.h
+  src/Parser/parser.cpp)
 
 add_library(token OBJECT
   src/common.h
@@ -33,6 +44,10 @@ add_library(token OBJECT
   src/Token/token_type.h
   src/Variant/literal.h
   src/Token/token.cpp)
+
+add_library(literal OBJECT
+  src/Variant/literal.h
+  src/Variant/literal.cpp)
 
 add_library(ast_printer OBJECT
   src/Ast/expr.h
@@ -45,4 +60,5 @@ target_link_libraries(ast_printer_test expr literal token ast_printer)
 
 add_executable(neem src/neem.cpp)
 
-target_link_libraries(neem expr literal lexer_error_reporter lexer token ast_printer)
+target_link_libraries(neem expr lexer_error_reporter parse_error
+  parser_error_reporter lexer parser token literal ast_printer)

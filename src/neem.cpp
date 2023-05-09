@@ -5,17 +5,25 @@
 
 #include "Error/error_reporter.h"
 #include "Error/lexer_error_reporter.h"
+#include "Error/parser_error_reporter.h"
 #include "common.h"
 #include "Lexer/lexer.h"
 #include "Parser/parser.h"
+#include "Visitor/ast_printer.h"
 
 void run(const std::string source) {
-  std::shared_ptr<Error_reporter> lexer_error_reporter =
-      std::make_shared<Lexer_error_reporter>();
+  auto lexer_error_reporter = std::make_shared<Lexer_error_reporter>();
   Lexer lexer {source, lexer_error_reporter};
   auto tokens = lexer.get_tokens();
-  // Parser parser {tokens};
-  // parser.parse();
+  if (lexer_error_reporter->had_error()) return;
+
+  auto parser_error_reporter = std::make_shared<Parser_error_reporter>();
+  Parser parser {tokens, parser_error_reporter};
+  // Parses only first expression if running through file.
+  auto expr = parser.parse();
+  if (parser_error_reporter->had_error()) return;
+  Ast_printer printer;
+  printer.print(expr);
 }
 
 void run_prompt() {

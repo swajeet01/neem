@@ -11,9 +11,9 @@ void Lexer_error_reporter::error(int line, std::string message) {
 }
 
 void Lexer_error_reporter::report(int line, std::string where,
-    std::string message) {
+  std::string message) {
   // Temp message
-  std::cerr << line << " Error: " << message << common::newl;
+  std::cerr << line << "| Error: " << message << common::newl;
 }
 
 bool Lexer_error_reporter::had_error() {

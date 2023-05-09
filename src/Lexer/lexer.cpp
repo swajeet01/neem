@@ -33,7 +33,7 @@ static const std::unordered_map<std::string, Token_type> keywords {
 };
 
 Lexer::Lexer(const std::string psource,
-    std::shared_ptr<Error_reporter> perror_reporter):
+             std::shared_ptr<Lexer_error_reporter> perror_reporter):
     source {psource},
     error_reporter {perror_reporter} {}
 
