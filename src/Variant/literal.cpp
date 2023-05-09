@@ -85,6 +85,6 @@ std::string Literal::to_string() {
   if (type == Literal_type::Nil) return "nil";
   if (type == Literal_type::Number) return std::to_string(num);
   if (type == Literal_type::String) return str;
-  if (type == Literal_type::Bool) return std::to_string(b00l);
+  if (type == Literal_type::Bool) return b00l ? "true" : "false";
   return "<No Type>";
 }
