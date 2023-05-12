@@ -6,10 +6,10 @@ Language originally created by
 [Robert Nystrom](https://twitter.com/intent/user?screen_name=munificentbob)
 in his book [Crafting Interpreters](https://craftinginterpreters.com/).
 
-This implementation of Neem is not optimized and sometimes does not follows
+This implementation of Neem is not optimized and sometimes does not follow
 best practices, it uses C++11 features and avoids any features introduced in
-later C++ standards. This is because Neem just serves as a prototype for
-another language project currently named _Project L1_.
+later C++ standards. This is because __Neem just serves as a prototype for
+another language project currently named _Project L1_.__
 
 :warning: Neem is not complete yet and is currently under continuous
 development.
