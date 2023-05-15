@@ -14,6 +14,18 @@ another language project currently named _Project L1_.__
 :warning: Neem is not complete yet and is currently under continuous
 development.
 
+## Progress
+
+- [x] Scanning
+- [x] Representing code 
+- [x] Parsing expressions
+- [ ] Evaluating expressions
+- [ ] Statements and state
+- [ ] Control flow
+- [ ] Functions
+- [ ] Resolving and binding
+- [ ] Structs
+
 ## Build and run
 
 The main executable `neem` is not complete yet, but can be built and run.
