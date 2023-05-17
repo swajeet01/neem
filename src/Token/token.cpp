@@ -14,10 +14,10 @@ std::string Token::to_string() {
   auto str = "Token '" + lexeme + "' ";
 
   switch (literal->get_type()) {
-    case Literal_type::Number:
+    case Literal_type::NUMBER:
       str = str + std::to_string(literal->get_number());
       break;
-    case Literal_type::String:
+    case Literal_type::STRING:
       str = str + literal->get_string();
       break;
     default: break;

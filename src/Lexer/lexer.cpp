@@ -95,7 +95,7 @@ void Lexer::string_tk() {
   
   auto value = source.substr(start + 1, current - start - 2);
   // TODO: Implement escape sequences.
-  auto str_literal = std::make_shared<Literal>(Literal_type::String, value);
+  auto str_literal = std::make_shared<Literal>(Literal_type::STRING, value);
   add_token(Token_type::STRING, str_literal);
 }
 
@@ -110,8 +110,8 @@ void Lexer::number() {
   }
   auto str_rep = source.substr(start, current - start);
   auto value = std::stod(str_rep);
-  // Literal num_literal {Literal_type::Number, value};
-  auto num_literal = std::make_shared<Literal>(Literal_type::Number, value);
+  // Literal num_literal {Literal_type::NUMBER, value};
+  auto num_literal = std::make_shared<Literal>(Literal_type::NUMBER, value);
   add_token(Token_type::NUMBER, num_literal);
 }
 

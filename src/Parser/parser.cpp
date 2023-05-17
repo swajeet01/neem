@@ -85,19 +85,19 @@ std::shared_ptr<Token> Parser::consume(Token_type type,
 std::shared_ptr<Expr> Parser::primary() {
   if (match({Token_type::NTRUE})) {
     return std::make_shared<Ast_literal>(
-      std::make_shared<Literal>(Literal_type::Bool, true)
+      std::make_shared<Literal>(Literal_type::BOOL, true)
     );
   }
 
   if (match({Token_type::NFALSE})) {
     return std::make_shared<Ast_literal>(
-      std::make_shared<Literal>(Literal_type::Bool, false)
+      std::make_shared<Literal>(Literal_type::BOOL, false)
     );
   }
 
   if (match({Token_type::NIL}))
     return std::make_shared<Ast_literal>(
-      std::make_shared<Literal>(Literal_type::Nil)
+      std::make_shared<Literal>(Literal_type::NIL)
     );
   
   if (match({Token_type::NUMBER, Token_type::STRING})) {

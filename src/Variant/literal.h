@@ -3,10 +3,10 @@
 
 #include <string>
 
-enum class Literal_type { Number, String, Bool, Nil, None };
+enum class Literal_type { NUMBER, STRING, BOOL, NIL, NONE };
 
 class Literal {
-  Literal_type type {Literal_type::None};
+  Literal_type type {Literal_type::NONE};
   double num;
   std::string str;
   bool b00l;
