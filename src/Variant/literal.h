@@ -10,6 +10,7 @@ class Literal {
   double num;
   std::string str;
   bool b00l;
+  void clear_all();
 public:
   Literal();
   Literal(Literal_type, double);

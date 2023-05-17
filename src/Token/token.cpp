@@ -7,18 +7,18 @@
 #include "../Variant/literal.h"
 
 Token::Token(const std::string plexeme, int pline, Token_type ptype,
-    std::shared_ptr<Literal> pliteral):
+    Literal pliteral):
     lexeme {plexeme}, line {pline}, type {ptype}, literal {pliteral} { }
 
 std::string Token::to_string() {
   auto str = "Token '" + lexeme + "' ";
 
-  switch (literal->get_type()) {
+  switch (literal.get_type()) {
     case Literal_type::NUMBER:
-      str = str + std::to_string(literal->get_number());
+      str = str + std::to_string(literal.get_number());
       break;
     case Literal_type::STRING:
-      str = str + literal->get_string();
+      str = str + literal.get_string();
       break;
     default: break;
   }

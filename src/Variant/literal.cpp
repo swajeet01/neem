@@ -17,7 +17,7 @@ Literal::Literal(Literal_type ptype, double pnum) {
 }
 
 Literal::Literal(Literal_type ptype, std::string pstr) {
-  if (ptype != Literal_type::NUMBER) {
+  if (ptype != Literal_type::STRING) {
       throw std::runtime_error {"Expected Literal_type 'STRING'."};
   }
   type = ptype;
@@ -87,4 +87,8 @@ std::string Literal::to_string() {
   if (type == Literal_type::STRING) return str;
   if (type == Literal_type::BOOL) return b00l ? "true" : "false";
   return "<No Type>";
+}
+
+void clear_all() {
+  // TODO: Implement clear_all
 }

@@ -10,13 +10,13 @@ bool Parser_error_reporter::had_error() {
   return fhad_error;
 }
 
-void Parser_error_reporter::error(std::shared_ptr<Token> token,
+void Parser_error_reporter::error(const Token& token,
     std::string message) {
   fhad_error = true;
-  if (token->type == Token_type::NEOF) {
-    report(token->line, " at end", message);
+  if (token.type == Token_type::NEOF) {
+    report(token.line, " at end", message);
   } else {
-    report(token->line, " at '" + token->lexeme + "'", message);
+    report(token.line, " at '" + token.lexeme + "'", message);
   }
 }
 

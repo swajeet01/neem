@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 
 class Member:
     def __init__(self, mtype, mname):
-        self.mtype = mtype
         self.mname = mname
+        self.is_ptr = mtype[-1] == "*"
+        self.mtype = mtype[:-1] if self.is_ptr else mtype
 
 class Klass:
     def __init__(self, name, members):
@@ -61,13 +63,16 @@ def generate_fwd_declarations_file(klasses, base, writer):
     writer.emmit_blank()
     writer.writeln("#endif")
 
+def get_parameter_type(member):
+    return ("std::shared_ptr<" + member.mtype + ">") if member.is_ptr else member.mtype
+
 def generate_class_decl(klass, base, writer):
     parameters = ", ".join(
-        map(lambda member: "std::shared_ptr<" + member.mtype + ">", klass.members))
+        map(get_parameter_type, klass.members))
     writer.writeln("struct " + klass.name + ": public " + base + " {")
     for member in klass.members:
-        writer.writeln(tabs(1) + "std::shared_ptr<" + member.mtype +
-                "> " + member.mname + ";")
+        writer.writeln(tabs(1) + get_parameter_type(member) + " " +
+            member.mname + ";")
     writer.writeln(tabs(1) + klass.name +
             "(" + parameters + ");")
     writer.writeln(tabs(1) + "void accept(Mutable_state_visitor&);")
@@ -96,10 +101,12 @@ def generate_header_file(klasses, base, writer):
     writer.emmit_blank()
     writer.writeln("#endif")
 
+def get_parameter(member):
+    return get_parameter_type(member) + " p_" + member.mname
+
 def generate_class_impl(klass, base, writer):
     parameters = ", ".join(
-        map(lambda member: "std::shared_ptr<" + member.mtype + "> "
-            + "p_" + member.mname, klass.members))
+        map(get_parameter, klass.members))
     writer.writeln(klass.name + "::" + klass.name + "(" + parameters + "):")
     initializer = ", ".join(
         map(lambda member: member.mname + " {p_" + member.mname + "}", klass.members))
@@ -130,19 +137,19 @@ def main():
 
     klasses = read_classes(desc_file)
     
-    fwd_filename = output_dir + "/" + base.lower() + "_fwd.h"
+    fwd_filename = os.path.join(output_dir, base.lower() + "_fwd.h")
     file = open(fwd_filename, "w")
     writer = Writer(file)
     generate_fwd_declarations_file(klasses, base, writer)
     file.close()
     
-    header_filename = output_dir + "/" + base.lower() + ".h"
+    header_filename = os.path.join(output_dir, base.lower() + ".h")
     file = open(header_filename, "w")
     writer = Writer(file)
     generate_header_file(klasses, base, writer)
     file.close()
     
-    impl_filename = output_dir + "/" + base.lower() + ".cpp"
+    impl_filename = os.path.join(output_dir, base.lower() + ".cpp")
     file = open(impl_filename, "w")
     writer = Writer(file)
     generate_impl_file(klasses, base, writer)

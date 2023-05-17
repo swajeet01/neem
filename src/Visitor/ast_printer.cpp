@@ -12,11 +12,11 @@ std::string Ast_printer::print(std::shared_ptr<Expr> expr) {
 }
 
 void Ast_printer::visit(Binary& expr) {
-  data = parenthesize(expr.op->lexeme, { expr.left, expr.right });
+  data = parenthesize(expr.op.lexeme, { expr.left, expr.right });
 }
 
 void Ast_printer::visit(Unary& expr) {
-  data = parenthesize(expr.op->lexeme, { expr.right });
+  data = parenthesize(expr.op.lexeme, { expr.right });
 }
 
 void Ast_printer::visit(Grouping& expr) {
@@ -24,7 +24,7 @@ void Ast_printer::visit(Grouping& expr) {
 }
 
 void Ast_printer::visit(Ast_literal& expr) {
-  data = expr.value->to_string();
+  data = expr.value.to_string();
 }
 
 std::string Ast_printer::parenthesize(std::string name,

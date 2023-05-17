@@ -11,28 +11,24 @@ Parser::Parser(const std::vector<Token>& p_tokens,
     std::shared_ptr<Parser_error_reporter> p_error_reporter):
   tokens { p_tokens }, error_reporter {p_error_reporter} {}
 
-std::shared_ptr<Token> Parser::previous() {
-  auto& token = tokens[current - 1];
-  return std::make_shared<Token>(token.lexeme, token.line, token.type,
-     token.literal);
+const Token& Parser::previous() {
+  return tokens[current - 1];
 }
 
-std::shared_ptr<Token> Parser::peek() {
-  auto& token = tokens[current];
-  return std::make_shared<Token>(token.lexeme, token.line, token.type,
-     token.literal);
+const Token& Parser::peek() {
+  return tokens[current];
 }
 
 bool Parser::is_at_end() {
-  return peek()->type == Token_type::NEOF;
+  return peek().type == Token_type::NEOF;
 }
 
 bool Parser::check(Token_type type) {
   if (is_at_end()) return false;
-  return peek()->type == type;
+  return peek().type == type;
 }
 
-std::shared_ptr<Token> Parser::advance() {
+const Token& Parser::advance() {
   if (!is_at_end()) current++;
   return previous();
 }
@@ -51,9 +47,9 @@ void Parser::synchronize() {
   advance();
 
   while (!is_at_end()) {
-    if (previous()->type == Token_type::SEMI_COL) return;
+    if (previous().type == Token_type::SEMI_COL) return;
 
-    switch (peek()->type) {
+    switch (peek().type) {
       case Token_type::STRUCT:
       case Token_type::FN:
       case Token_type::LET:
@@ -70,13 +66,13 @@ void Parser::synchronize() {
   }
 }
 
-Parse_error Parser::error(std::shared_ptr<Token> token,
+Parse_error Parser::error(const Token& token,
     const std::string message) {
   error_reporter->error(token, message);
   return Parse_error {"Parse error."};
 }
 
-std::shared_ptr<Token> Parser::consume(Token_type type,
+const Token& Parser::consume(Token_type type,
     const std::string message) {
   if (check(type)) return advance();
   throw error(peek(), message);
@@ -85,24 +81,24 @@ std::shared_ptr<Token> Parser::consume(Token_type type,
 std::shared_ptr<Expr> Parser::primary() {
   if (match({Token_type::NTRUE})) {
     return std::make_shared<Ast_literal>(
-      std::make_shared<Literal>(Literal_type::BOOL, true)
+      Literal{Literal_type::BOOL, true}
     );
   }
 
   if (match({Token_type::NFALSE})) {
     return std::make_shared<Ast_literal>(
-      std::make_shared<Literal>(Literal_type::BOOL, false)
+      Literal {Literal_type::BOOL, false}
     );
   }
 
   if (match({Token_type::NIL}))
     return std::make_shared<Ast_literal>(
-      std::make_shared<Literal>(Literal_type::NIL)
+      Literal {Literal_type::NIL}
     );
   
   if (match({Token_type::NUMBER, Token_type::STRING})) {
     return std::make_shared<Ast_literal>(
-      previous()->literal
+      previous().literal
     );
   }
 

@@ -24,7 +24,7 @@ class Lexer {
   void identifier();
   void get_token();
   void add_token(Token_type);
-  void add_token(Token_type, std::shared_ptr<Literal>);
+  void add_token(Token_type, Literal);
   char advance();
 public:
   Lexer(const std::string, std::shared_ptr<Lexer_error_reporter>);

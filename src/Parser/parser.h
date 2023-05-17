@@ -18,13 +18,13 @@ class Parser {
   std::shared_ptr<Parser_error_reporter> error_reporter;
   bool match(std::initializer_list<Token_type>);
   std::shared_ptr<Expr> comparison();
-  std::shared_ptr<Token> previous();
+  const Token& previous();
   bool check(Token_type);
-  std::shared_ptr<Token> advance();
-  std::shared_ptr<Token> peek();
+  const Token& advance();
+  const Token& peek();
   bool is_at_end();
-  std::shared_ptr<Token> consume(Token_type, const std::string);
-  Parse_error error(std::shared_ptr<Token>, const std::string message);
+  const Token& consume(Token_type, const std::string);
+  Parse_error error(const Token&, const std::string message);
   void synchronize();
   std::shared_ptr<Expr> expression();
   std::shared_ptr<Expr> equality();

@@ -10,7 +10,7 @@
 class Parser_error_reporter: public Error_reporter {
   bool fhad_error;
 public:
-  void error(std::shared_ptr<Token>, std::string);
+  void error(const Token&, std::string);
   void report(int, std::string, std::string);
   bool had_error();
 };

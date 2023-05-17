@@ -9,9 +9,9 @@
 
 class Token {
 public:
-  Token(const std::string, int, Token_type, std::shared_ptr<Literal>);
+  Token(const std::string, int, Token_type, Literal);
   int line;
-  std::shared_ptr<Literal> literal;
+  Literal literal;
   Token_type type;
   std::string lexeme;
   std::string to_string();
