@@ -150,10 +150,10 @@ void Lexer::get_token() {
     case '=':
       add_token(match('=') ? Token_type::EQ_EQ : Token_type::EQ);
       break;
-    case '<':
+    case '>':
       add_token(match('=') ? Token_type::GREATER_EQ : Token_type::GREATER);
       break;
-    case '>':
+    case '<':
       add_token(match('=') ? Token_type::LESSER_EQ : Token_type::LESSER);
       break;
     

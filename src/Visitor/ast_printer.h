@@ -8,15 +8,16 @@
 #include "../Ast/expr.h"
 #include "mutable_state_visitor.h"
 
-struct Ast_printer: public Mutable_state_visitor {
+class Ast_printer: public Mutable_state_visitor {
   std::string data;
-  std::string print(std::shared_ptr<Expr>);
+  std::string parenthesize(std::string,
+      std::initializer_list<std::shared_ptr<Expr>>);
   void visit(Binary&);
   void visit(Unary&);
   void visit(Grouping&);
   void visit(Ast_literal&);
-  std::string parenthesize(std::string,
-      std::initializer_list<std::shared_ptr<Expr>>);
+public:
+  std::string print(std::shared_ptr<Expr>);
 };
 
 

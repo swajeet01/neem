@@ -4,26 +4,34 @@
 #include <fstream>
 
 #include "Error/error_reporter.h"
+#include "Error/interpreter_error_reporter.h"
 #include "Error/lexer_error_reporter.h"
 #include "Error/parser_error_reporter.h"
+#include "Visitor/interpreter.h"
 #include "common.h"
 #include "Lexer/lexer.h"
 #include "Parser/parser.h"
 #include "Visitor/ast_printer.h"
 
-void run(const std::string source) {
+int run(const std::string source) {
+
   auto lexer_error_reporter = std::make_shared<Lexer_error_reporter>();
   Lexer lexer {source, lexer_error_reporter};
   auto tokens = lexer.get_tokens();
-  if (lexer_error_reporter->had_error()) return;
+  if (lexer_error_reporter->had_error()) return 65;
 
   auto parser_error_reporter = std::make_shared<Parser_error_reporter>();
   Parser parser {tokens, parser_error_reporter};
   // Parses only first expression if running through file.
   auto expr = parser.parse();
-  if (parser_error_reporter->had_error()) return;
-  Ast_printer printer;
-  printer.print(expr);
+  if (parser_error_reporter->had_error()) return 65;
+
+  auto interpreter_error_reporter =
+      std::make_shared<Interpreter_error_reporter>();
+  Interpreter interpreter {interpreter_error_reporter};
+  interpreter.interprete(expr);
+  if (interpreter_error_reporter->had_error()) return 70;
+  return 0;
 }
 
 void run_prompt() {
@@ -48,7 +56,8 @@ void run_file(const char* filename) {
       std::istreambuf_iterator<char> {in_file},
       std::istreambuf_iterator<char> {}
   };
-  run(file_content);
+  int status = run(file_content);
+  if (status != 0) std::exit(status);
 }
 
 int main(int argc, char* argv[]) {

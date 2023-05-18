@@ -12,7 +12,6 @@ bool Parser_error_reporter::had_error() {
 
 void Parser_error_reporter::error(const Token& token,
     std::string message) {
-  fhad_error = true;
   if (token.type == Token_type::NEOF) {
     report(token.line, " at end", message);
   } else {
@@ -22,6 +21,7 @@ void Parser_error_reporter::error(const Token& token,
 
 void Parser_error_reporter::report(int line, std::string where,
       std::string message) {
-  std::cerr << line << "| Error: " << message << common::newl <<
+  std::cerr << line << "| Parse error: " << message << common::newl <<
       where << common::newl;
+  fhad_error = true;
 }

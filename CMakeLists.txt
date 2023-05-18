@@ -9,10 +9,21 @@ add_library(expr OBJECT
   src/Ast/expr.h
   src/Ast/expr.cpp)
 
+add_library(interpreter_error_reporter OBJECT
+  src/common.h
+  src/Error/neem_runtime_error.h
+  src/Error/interpreter_error_reporter.h
+  src/Error/interpreter_error_reporter.cpp)
+
 add_library(lexer_error_reporter OBJECT
   src/common.h
   src/Error/lexer_error_reporter.h
   src/Error/lexer_error_reporter.cpp)
+
+add_library(neem_runtime_error OBJECT
+  src/Token/token.h
+  src/Error/neem_runtime_error.h
+  src/Error/neem_runtime_error.cpp)
 
 add_library(parse_error OBJECT
   src/Error/parse_error.h
@@ -49,16 +60,26 @@ add_library(literal OBJECT
   src/Variant/literal.h
   src/Variant/literal.cpp)
 
+add_library(neem_value OBJECT
+  src/Variant/neem_value.h
+  src/Variant/neem_value.cpp)
+
 add_library(ast_printer OBJECT
   src/Ast/expr.h
   src/Visitor/ast_printer.h
   src/Visitor/ast_printer.cpp)
 
-add_executable(ast_printer_test src/ast_printer_test.cpp)
-
-target_link_libraries(ast_printer_test expr literal token ast_printer)
+add_library(interpreter OBJECT
+  src/Ast/expr.h
+  src/Error/neem_runtime_error.h
+  src/Error/interpreter_error_reporter.h
+  src/common.h
+  src/Visitor/interpreter.h
+  src/Visitor/interpreter.cpp)
 
 add_executable(neem src/neem.cpp)
 
-target_link_libraries(neem expr lexer_error_reporter parse_error
-  parser_error_reporter lexer parser token literal ast_printer)
+target_link_libraries(neem expr interpreter_error_reporter lexer_error_reporter
+  neem_runtime_error parse_error parser_error_reporter lexer parser token
+  literal neem_value interpreter)
+
