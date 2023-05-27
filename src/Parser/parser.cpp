@@ -5,6 +5,7 @@
 
 #include "../Token/token.h"
 #include "../Ast/expr.h"
+#include "../Ast/stmt.h"
 #include "parser.h"
 
 Parser::Parser(const std::vector<Token>& p_tokens,
@@ -173,10 +174,32 @@ std::shared_ptr<Expr> Parser::expression() {
   return equality();
 }
 
-std::shared_ptr<Expr> Parser::parse() {
-  try {
-    return expression();
-  } catch (Parse_error e) {
-    return nullptr;
+std::shared_ptr<Stmt> Parser::statement() {
+  if (match({Token_type::PRINT})) {
+    return print_statement();
   }
+  return expr_statement();
+}
+
+std::shared_ptr<Stmt> Parser::print_statement() {
+  auto value = expression();
+  consume(Token_type::SEMI_COL, "Expected ';' after value.");
+  return std::make_shared<Print>(value);
+}
+
+std::shared_ptr<Stmt> Parser::expr_statement() {
+  auto expr = expression();
+  consume(Token_type::SEMI_COL, "Expected ';' after expression.");
+  return std::make_shared<Expression>(expr);
+}
+
+std::vector<std::shared_ptr<Stmt>> Parser::parse() {
+  try {
+    std::vector<std::shared_ptr<Stmt>> statements;
+    while (!is_at_end()) {
+      statements.push_back(statement());
+    }
+    return statements;
+  } catch (Parse_error& e) {}
+  return {};
 }

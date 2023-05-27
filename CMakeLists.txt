@@ -9,6 +9,11 @@ add_library(expr OBJECT
   src/Ast/expr.h
   src/Ast/expr.cpp)
 
+add_library(stmt OBJECT
+  src/Ast/expr.h
+  src/Visitor/mutable_state_visitor.h
+  src/Ast/stmt.cpp)
+
 add_library(interpreter_error_reporter OBJECT
   src/common.h
   src/Error/neem_runtime_error.h
@@ -81,5 +86,5 @@ add_executable(neem src/neem.cpp)
 
 target_link_libraries(neem expr interpreter_error_reporter lexer_error_reporter
   neem_runtime_error parse_error parser_error_reporter lexer parser token
-  literal neem_value interpreter)
+  literal neem_value interpreter stmt)
 

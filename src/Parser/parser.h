@@ -9,6 +9,7 @@
 
 #include "../Token/token.h"
 #include "../Ast/expr.h"
+#include "../Ast/stmt.h"
 #include "../Error/parse_error.h"
 #include "../Error/parser_error_reporter.h"
 
@@ -32,9 +33,12 @@ class Parser {
   std::shared_ptr<Expr> factor();
   std::shared_ptr<Expr> unary();
   std::shared_ptr<Expr> primary();
+  std::shared_ptr<Stmt> statement();
+  std::shared_ptr<Stmt> print_statement();
+  std::shared_ptr<Stmt> expr_statement();
 public:
   Parser(const std::vector<Token>&, std::shared_ptr<Parser_error_reporter>);
-  std::shared_ptr<Expr> parse();
+  std::vector<std::shared_ptr<Stmt>> parse();
 };
 
 #endif // !PARSER_H

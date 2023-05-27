@@ -23,13 +23,13 @@ int run(const std::string source) {
   auto parser_error_reporter = std::make_shared<Parser_error_reporter>();
   Parser parser {tokens, parser_error_reporter};
   // Parses only first expression if running through file.
-  auto expr = parser.parse();
+  auto statements = parser.parse();
   if (parser_error_reporter->had_error()) return 65;
 
   auto interpreter_error_reporter =
       std::make_shared<Interpreter_error_reporter>();
   Interpreter interpreter {interpreter_error_reporter};
-  interpreter.interprete(expr);
+  interpreter.interprete(statements);
   if (interpreter_error_reporter->had_error()) return 70;
   return 0;
 }

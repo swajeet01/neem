@@ -1,8 +1,10 @@
 #include <cmath>
 #include <memory>
 #include <iostream>
+#include <vector>
 
 #include "../Ast/expr.h"
+#include "../Ast/stmt.h"
 #include "../Error/neem_runtime_error.h"
 #include "../Error/interpreter_error_reporter.h"
 #include "../common.h"
@@ -149,10 +151,26 @@ bool Interpreter::is_equal(Neem_value& left, Neem_value& right) {
   return false;
 }
 
-void Interpreter::interprete(std::shared_ptr<Expr> expr) {
+void Interpreter::visit(Expression& stmt) {
+  evaluate(stmt.expression);
+  data = Neem_value();
+}
+
+void Interpreter::visit(Print& stmt) {
+  auto value = evaluate(stmt.expression);
+  std::cout << value.to_string() << common::newl;
+  data = Neem_value();
+}
+
+void Interpreter::execute(std::shared_ptr<Stmt> statement) {
+  statement->accept(*this);
+}
+
+void Interpreter::interprete(std::vector<std::shared_ptr<Stmt>> statements) {
   try {
-    auto value = evaluate(expr);
-    std::cout << value.to_string() << common::newl;
+    for (auto statement: statements) {
+      execute(statement);
+    }
   } catch (Neem_runtime_error err) {
     error_reporter->error(err);
   }
