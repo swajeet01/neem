@@ -20,7 +20,7 @@ development.
 - [x] Representing code 
 - [x] Parsing expressions
 - [x] Evaluating expressions
-- [ ] Statements and state
+- [ ] Statements and state \[WIP\]
 - [ ] Control flow
 - [ ] Functions
 - [ ] Resolving and binding
