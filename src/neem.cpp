@@ -13,7 +13,6 @@
 #include "Parser/parser.h"
 #include "Visitor/ast_printer.h"
 
-
 int run(const std::string source) {
 
   auto lexer_error_reporter = std::make_shared<Lexer_error_reporter>();
