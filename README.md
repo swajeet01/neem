@@ -1,3 +1,7 @@
+<p align="center">
+    <img height="144" src="https://imgur.com/sitRo48.png" alt="Neem logo">
+</p>
+
 # Neem Programming Language
 
 A C++ port and extension of
