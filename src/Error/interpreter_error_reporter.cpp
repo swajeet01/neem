@@ -12,7 +12,7 @@ void Interpreter_error_reporter::report(int line, std::string where,
 }
 
 void Interpreter_error_reporter::error(Neem_runtime_error& err) {
-  report(err.token.line, "", err.what());
+  report(err.token.line, "Near token '" + err.token.lexeme + "'.", err.what());
 }
 
 bool Interpreter_error_reporter::had_error() {

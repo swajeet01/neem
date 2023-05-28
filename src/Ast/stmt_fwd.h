@@ -7,5 +7,6 @@
 
 struct Expression;
 struct Print;
+struct Var;
 
 #endif

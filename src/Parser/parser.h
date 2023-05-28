@@ -28,6 +28,7 @@ class Parser {
   Parse_error error(const Token&, const std::string message);
   void synchronize();
   std::shared_ptr<Expr> expression();
+  std::shared_ptr<Expr> assignment();
   std::shared_ptr<Expr> equality();
   std::shared_ptr<Expr> term();
   std::shared_ptr<Expr> factor();
@@ -36,6 +37,8 @@ class Parser {
   std::shared_ptr<Stmt> statement();
   std::shared_ptr<Stmt> print_statement();
   std::shared_ptr<Stmt> expr_statement();
+  std::shared_ptr<Stmt> declaration();
+  std::shared_ptr<Stmt> var_declaration();
 public:
   Parser(const std::vector<Token>&, std::shared_ptr<Parser_error_reporter>);
   std::vector<std::shared_ptr<Stmt>> parse();

@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 project(neem LANGUAGES CXX)
 
+message("[Info]: CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
+message("[Info]: CMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}")
+message("[Info]: CMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}")
+
 add_library(expr OBJECT
   src/Token/token.h
   src/Variant/literal.h
@@ -82,9 +86,15 @@ add_library(interpreter OBJECT
   src/Visitor/interpreter.h
   src/Visitor/interpreter.cpp)
 
+add_library(environment OBJECT
+  src/Error/neem_runtime_error.h
+  src/Token/token.h
+  src/Environment/environment.h
+  src/Environment/environment.cpp)
+
 add_executable(neem src/neem.cpp)
 
 target_link_libraries(neem expr interpreter_error_reporter lexer_error_reporter
   neem_runtime_error parse_error parser_error_reporter lexer parser token
-  literal neem_value interpreter stmt)
+  literal neem_value interpreter stmt environment)
 

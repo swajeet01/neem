@@ -5,9 +5,11 @@
 #ifndef EXPR_FWD_H
 #define EXPR_FWD_H
 
+struct Assign;
 struct Binary;
 struct Grouping;
 struct Unary;
 struct Ast_literal;
+struct Variable;
 
 #endif

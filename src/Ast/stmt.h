@@ -10,9 +10,6 @@
 #include "expr.h"
 #include "../Visitor/mutable_state_visitor.h"
 
-struct Expression;
-struct Print;
-
 struct Stmt {
 	virtual void accept(Mutable_state_visitor&) = 0;
 };
@@ -26,6 +23,13 @@ struct Expression: public Stmt {
 struct Print: public Stmt {
 	std::shared_ptr<Expr> expression;
 	Print(std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&);
+};
+
+struct Var: public Stmt {
+	Token name;
+	std::shared_ptr<Expr> initializer;
+	Var(Token, std::shared_ptr<Expr>);
 	void accept(Mutable_state_visitor&);
 };
 

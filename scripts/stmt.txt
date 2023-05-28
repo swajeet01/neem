@@ -1,3 +1,4 @@
 %includes   :   memory*, expr.h, ../Visitor/mutable_state_visitor.h
 Expression  :   Expr* expression
 Print       :   Expr* expression
+Var         :   Token name, Expr* initializer

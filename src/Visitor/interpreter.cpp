@@ -15,14 +15,16 @@ void check_number_operand(Token& token, Neem_value& operand) {
   throw Neem_runtime_error {token, "Operand must be a number."};
 }
 
+void Interpreter::set_error_reporter(
+    std::shared_ptr<Interpreter_error_reporter> new_error_reporter) {
+  error_reporter = new_error_reporter;
+}
+
 void check_number_operand(Token& token, Neem_value& left, Neem_value& right) {
   if (left.get_type() == Value_type::NUMBER && right.get_type() == Value_type::NUMBER)
     return;
-  throw Neem_runtime_error {token, "Operand must be numbers"};
+  throw Neem_runtime_error {token, "Operand must be numbers."};
 }
-
-Interpreter::Interpreter(std::shared_ptr<Interpreter_error_reporter> perror_reporter):
-  error_reporter {perror_reporter} {}
 
 void Interpreter::visit(Ast_literal& expr) {
   switch (expr.value.get_type()) {
@@ -160,6 +162,25 @@ void Interpreter::visit(Print& stmt) {
   auto value = evaluate(stmt.expression);
   std::cout << value.to_string() << common::newl;
   data = Neem_value();
+}
+
+void Interpreter::visit(Var& stmt) {
+  Neem_value value;
+  if (stmt.initializer) {
+    value = evaluate(stmt.initializer);
+  }
+  environment.define(stmt.name.lexeme, value);
+  data = Neem_value();
+}
+
+void Interpreter::visit(Variable& expr) {
+  data = environment.get(expr.name);
+}
+
+void Interpreter::visit(Assign& expr) {
+  auto value = evaluate(expr.value);
+  environment.assign(expr.name, value);
+  data = value;
 }
 
 void Interpreter::execute(std::shared_ptr<Stmt> statement) {

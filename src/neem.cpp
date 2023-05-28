@@ -13,6 +13,7 @@
 #include "Parser/parser.h"
 #include "Visitor/ast_printer.h"
 
+
 int run(const std::string source) {
 
   auto lexer_error_reporter = std::make_shared<Lexer_error_reporter>();
@@ -22,15 +23,16 @@ int run(const std::string source) {
 
   auto parser_error_reporter = std::make_shared<Parser_error_reporter>();
   Parser parser {tokens, parser_error_reporter};
-  // Parses only first expression if running through file.
   auto statements = parser.parse();
   if (parser_error_reporter->had_error()) return 65;
 
+  static Interpreter interpreter {};
   auto interpreter_error_reporter =
       std::make_shared<Interpreter_error_reporter>();
-  Interpreter interpreter {interpreter_error_reporter};
+  interpreter.set_error_reporter(interpreter_error_reporter);
   interpreter.interprete(statements);
   if (interpreter_error_reporter->had_error()) return 70;
+
   return 0;
 }
 

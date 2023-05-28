@@ -13,6 +13,9 @@ struct Mutable_state_visitor {
   virtual void visit(Ast_literal&) = 0;
   virtual void visit(Print&) = 0;
   virtual void visit(Expression&) = 0;
+  virtual void visit(Var&) = 0;
+  virtual void visit(Variable&) = 0;
+  virtual void visit(Assign&) = 0;
 };
 
 #endif // !MUTABLE_STATE_VISITOR_H

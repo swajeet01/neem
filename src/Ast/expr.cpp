@@ -6,11 +6,14 @@
 #include "../Variant/literal.h"
 #include "../Visitor/mutable_state_visitor.h"
 
-struct Binary;
-struct Grouping;
-struct Unary;
-struct Ast_literal;
 #include "expr.h"
+
+Assign::Assign(Token p_name, std::shared_ptr<Expr> p_value):
+	name {p_name}, value {p_value} {}
+
+void Assign::accept(Mutable_state_visitor& visitor) {
+	visitor.visit(*this);
+}
 
 Binary::Binary(std::shared_ptr<Expr> p_left, Token p_op, std::shared_ptr<Expr> p_right):
 	left {p_left}, op {p_op}, right {p_right} {}
@@ -37,6 +40,13 @@ Ast_literal::Ast_literal(Literal p_value):
 	value {p_value} {}
 
 void Ast_literal::accept(Mutable_state_visitor& visitor) {
+	visitor.visit(*this);
+}
+
+Variable::Variable(Token p_name):
+	name {p_name} {}
+
+void Variable::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(*this);
 }
 

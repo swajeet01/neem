@@ -11,13 +11,15 @@
 #include "../Variant/literal.h"
 #include "../Visitor/mutable_state_visitor.h"
 
-struct Binary;
-struct Grouping;
-struct Unary;
-struct Ast_literal;
-
 struct Expr {
 	virtual void accept(Mutable_state_visitor&) = 0;
+};
+
+struct Assign: public Expr {
+	Token name;
+	std::shared_ptr<Expr> value;
+	Assign(Token, std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&);
 };
 
 struct Binary: public Expr {
@@ -44,6 +46,12 @@ struct Unary: public Expr {
 struct Ast_literal: public Expr {
 	Literal value;
 	Ast_literal(Literal);
+	void accept(Mutable_state_visitor&);
+};
+
+struct Variable: public Expr {
+	Token name;
+	Variable(Token);
 	void accept(Mutable_state_visitor&);
 };
 

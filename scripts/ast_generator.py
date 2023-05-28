@@ -27,7 +27,6 @@ def split_member_description(description):
     splitted = description.split(" ")
     return (item.strip() for item in splitted)
 
-
 def get_members(member_desc):
     members = []
     descriptions = member_desc.split(", ")
@@ -36,28 +35,27 @@ def get_members(member_desc):
         members.append(Member(mtype, mname))
     return members
 
-def read_classes(desc_file):
-    klasses = []
-    with open(desc_file) as infile:
-        descriptions = infile.readlines()
-        descriptions = filter(lambda description: not description.startswith("%"), descriptions)
-        for description in descriptions:
-            name, member_descriptions = split_description(description)
-            members = get_members(member_descriptions)
-            klasses.append(Klass(name, members))
-    return klasses
+def get_includes(line):
+    files_str = line.split(":")[1].strip()
+    return map(Include, files_str.split(", "))
 
-def read_include_directives(desc_file):
-    includes = []
+def get_klass(line):
+    name, member_descriptions = split_description(line)
+    members = get_members(member_descriptions)
+    return Klass(name, members)
+
+def read_file(desc_file):
+    lines = []
     with open(desc_file) as infile:
         lines = infile.readlines()
-        filtered_lines = list(filter(lambda line: line.startswith("%include"), lines))
-        for line in filtered_lines:
-            directive_data = line.split(":")[1].strip()
-            files = directive_data.split(", ")
-            for file in files:
-                includes.append(Include(file))
-    return includes
+    includes = []
+    klasses = []
+    for line in lines:
+        if line.startswith("%includes"):
+            includes.extend(get_includes(line)) 
+        else:
+            klasses.append(get_klass(line))
+    return includes, klasses
 
 class Writer:
     def __init__(self, file):
@@ -117,9 +115,6 @@ def generate_header_file(includes, klasses, base, writer):
         if not include.is_std:
             writer.writeln("#include \"" + include.file +"\"")
     writer.emmit_blank()
-    for klass in klasses:
-        writer.writeln("struct " + klass.name + ";")
-    writer.emmit_blank()
     writer.writeln("struct " + base + " {")
     writer.writeln(tabs(1) + "virtual void accept(Mutable_state_visitor&) = 0;")
     writer.writeln("};")
@@ -154,8 +149,6 @@ def generate_impl_file(includes, klasses, base, writer):
         if not include.is_std:
             writer.writeln("#include \"" + include.file +"\"")
     writer.emmit_blank()
-    for klass in klasses:
-        writer.writeln("struct " + klass.name + ";")
     writer.writeln("#include \"" + base.lower() + ".h\"")
     writer.emmit_blank()
     for klass in klasses:
@@ -168,9 +161,7 @@ def main():
     
     _, base, desc_file, output_dir = sys.argv
 
-    includes = read_include_directives(desc_file)
-
-    klasses = read_classes(desc_file)
+    includes, klasses = read_file(desc_file)
     
     fwd_filename = os.path.join(output_dir, base.lower() + "_fwd.h")
     file = open(fwd_filename, "w")

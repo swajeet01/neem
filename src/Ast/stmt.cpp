@@ -5,8 +5,6 @@
 #include "expr.h"
 #include "../Visitor/mutable_state_visitor.h"
 
-struct Expression;
-struct Print;
 #include "stmt.h"
 
 Expression::Expression(std::shared_ptr<Expr> p_expression):
@@ -20,6 +18,13 @@ Print::Print(std::shared_ptr<Expr> p_expression):
 	expression {p_expression} {}
 
 void Print::accept(Mutable_state_visitor& visitor) {
+	visitor.visit(*this);
+}
+
+Var::Var(Token p_name, std::shared_ptr<Expr> p_initializer):
+	name {p_name}, initializer {p_initializer} {}
+
+void Var::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(*this);
 }
 

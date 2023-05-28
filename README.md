@@ -25,6 +25,7 @@ development.
 - [ ] Functions
 - [ ] Resolving and binding
 - [ ] Structs
+- [ ] Arrays/Lists
 
 ## Build and run
 

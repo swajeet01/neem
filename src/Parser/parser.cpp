@@ -103,6 +103,10 @@ std::shared_ptr<Expr> Parser::primary() {
     );
   }
 
+  if (match({Token_type::IDENTIFIER})) {
+    return std::make_shared<Variable>(previous());
+  }
+
   if (match({Token_type::LEFT_PAREN})) {
     auto expr = expression();
     consume(Token_type::RIGHT_PAREN, "Expected ')' after expression.");
@@ -170,8 +174,25 @@ std::shared_ptr<Expr> Parser::equality() {
   return expr;
 }
 
+std::shared_ptr<Expr> Parser::assignment() {
+  auto expr = equality();
+  if (match({Token_type::EQ})) {
+    Token equals = previous();
+    auto value = assignment();
+    // expr must be of type Variable
+    // if (variable != nullptr)
+    if (auto variable = std::dynamic_pointer_cast<Variable>(expr)) {
+      Token name = variable->name;
+      return std::make_shared<Assign>(name, value);
+    }
+
+    error(equals, "Invalid assignment target.");
+  }
+  return expr;
+}
+
 std::shared_ptr<Expr> Parser::expression() {
-  return equality();
+  return assignment();
 }
 
 std::shared_ptr<Stmt> Parser::statement() {
@@ -193,11 +214,31 @@ std::shared_ptr<Stmt> Parser::expr_statement() {
   return std::make_shared<Expression>(expr);
 }
 
+std::shared_ptr<Stmt> Parser::declaration() {
+  try {
+    if (match({Token_type::LET})) return var_declaration();
+    return statement();
+  } catch (Parse_error& err) {
+    synchronize();
+    return nullptr;
+  }
+}
+
+std::shared_ptr<Stmt> Parser::var_declaration() {
+  auto name = consume(Token_type::IDENTIFIER, "Expected variable name.");
+  std::shared_ptr<Expr> initializer;
+  if (match({Token_type::EQ})) {
+    initializer = expression();
+  }
+  consume(Token_type::SEMI_COL, "Expected ';' after variable declaration.");
+  return std::make_shared<Var>(name, initializer);
+}
+
 std::vector<std::shared_ptr<Stmt>> Parser::parse() {
   try {
     std::vector<std::shared_ptr<Stmt>> statements;
     while (!is_at_end()) {
-      statements.push_back(statement());
+      statements.push_back(declaration());
     }
     return statements;
   } catch (Parse_error& e) {}
