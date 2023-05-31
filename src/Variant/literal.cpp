@@ -1,16 +1,20 @@
 #include <string>
 #include <stdexcept>
+#include <variant>
 
 #include "literal.h"
 
-Literal::Literal() {}
+Literal::Literal() {
+  data = std::monostate {};
+  type = Literal_type::NONE;
+}
 
 Literal::Literal(Literal_type ptype, double pnum) {
   if (ptype != Literal_type::NUMBER) {
       throw std::runtime_error {"Expected Literal_type 'NUMBER'."};
   }
   type = ptype;
-  num = pnum;
+  data = pnum;
 }
 
 Literal::Literal(Literal_type ptype, std::string pstr) {
@@ -18,7 +22,7 @@ Literal::Literal(Literal_type ptype, std::string pstr) {
       throw std::runtime_error {"Expected Literal_type 'STRING'."};
   }
   type = ptype;
-  str = pstr;
+  data = pstr;
 }
 
 Literal::Literal(Literal_type ptype, bool pbool) {
@@ -26,15 +30,17 @@ Literal::Literal(Literal_type ptype, bool pbool) {
       throw std::runtime_error {"Expected Literal_type 'BOOL'."};
   }
   type = ptype;
-  b00l = pbool;
+  data = pbool;
 }
 
 Literal::Literal(Literal_type ptype) {
   if (ptype != Literal_type::NIL) {
       throw std::runtime_error {"Expected Literal_type 'NIL'."};
   }
+  data = std::monostate {};
   type = ptype;
 }
+
 Literal_type Literal::get_type() {
   return type;
 }
@@ -44,7 +50,7 @@ std::string Literal::get_string() {
     throw std::runtime_error
       {"Tried to retrive member 'str' while holding other type of value."};
   }
-  return str;
+  return std::get<std::string>(data);
 }
 
 double Literal::get_number() {
@@ -52,7 +58,7 @@ double Literal::get_number() {
     throw std::runtime_error
       {"Tried to retrive member 'num' while holding other type of value."};
   }
-  return num;
+  return std::get<double>(data);
 }
 
 bool Literal::get_bool() {
@@ -60,28 +66,28 @@ bool Literal::get_bool() {
     throw std::runtime_error
       {"Tried to retrive member 'bool' while holding other type of value."};
   }
-  return b00l;
+  return std::get<bool>(data);
 }
 
-void Literal::put_string(std::string data) {
+void Literal::put_string(std::string str) {
   type = Literal_type::STRING;
-  str = data;
+  data = str;
 }
 
-void Literal::put_number(double data) {
+void Literal::put_number(double num) {
   type = Literal_type::NUMBER;
-  num = data;
+  data = num;
 }
 
-void Literal::put_bool(bool p_b00l) {
+void Literal::put_bool(bool b00l) {
   type = Literal_type::BOOL;
-  b00l = p_b00l;
+  data = b00l;
 }
 
 std::string Literal::to_string() {
   if (type == Literal_type::NIL) return "nil";
-  if (type == Literal_type::NUMBER) return std::to_string(num);
-  if (type == Literal_type::STRING) return str;
-  if (type == Literal_type::BOOL) return b00l ? "true" : "false";
+  if (type == Literal_type::NUMBER) return std::to_string(get_number());
+  if (type == Literal_type::STRING) return get_string();
+  if (type == Literal_type::BOOL) return get_bool() ? "true" : "false";
   return "<No Type>";
 }

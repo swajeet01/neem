@@ -2,14 +2,14 @@
 #define LITERAL_H
 
 #include <string>
+#include <variant>
+
 
 enum class Literal_type { NUMBER, STRING, BOOL, NIL, NONE };
 
 class Literal {
-  Literal_type type {Literal_type::NONE};
-  double num;
-  std::string str;
-  bool b00l;
+  Literal_type type;
+  std::variant<double, bool, std::string, std::monostate> data;
   void clear_all();
 public:
   Literal();

@@ -143,9 +143,20 @@ bool Interpreter::is_truthy(Neem_value& right) {
 }
 
 bool Interpreter::is_equal(Neem_value& left, Neem_value& right) {
+  if (left.get_type() == Value_type::NIL &&
+      right.get_type() == Value_type::NIL) {
+    return true;
+  }
+  // Reaches here, if both or either one is not nil.
+  if (left.get_type() == Value_type::NIL ||
+      right.get_type() == Value_type::NIL) {
+    return false;
+  }
+  // Reaches here, if both are not nil.
+  if (left.get_type() != right.get_type()) {
+    return false;
+  }
   switch (left.get_type()) {
-    case Value_type::NIL:
-      return right.get_type() == Value_type::NIL;
     case Value_type::NUMBER:
       return left.get_number() == right.get_number();
     case Value_type::STRING:

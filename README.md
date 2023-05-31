@@ -11,8 +11,7 @@ Language originally created by
 in his book [Crafting Interpreters](https://craftinginterpreters.com/).
 
 This implementation of Neem is not optimized and sometimes does not follow
-best practices, it uses C++11 features and avoids any features introduced in
-later C++ standards. This is because __Neem just serves as a prototype for
+best practices. This is because __Neem just serves as a prototype for
 another language project currently named _Project L1_.__ Neem might be
 refactored and optimized later.
 

@@ -2,14 +2,13 @@
 #define NEEM_VALUE_H
 
 #include <string>
+#include <variant>
 
 enum class Value_type {NUMBER, STRING, BOOL, NIL};
 
 class Neem_value {
-  Value_type type {Value_type::NIL};
-  double num;
-  std::string str;
-  bool b00l;
+  Value_type type;
+  std::variant<double, bool, std::string, std::monostate> data;
   void clear_all();
 public:
   Neem_value();
