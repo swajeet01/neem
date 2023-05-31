@@ -1,33 +1,37 @@
 #include <string>
 #include <stdexcept>
+#include <variant>
 
 #include "neem_value.h"
 
-Neem_value::Neem_value() {}
+Neem_value::Neem_value() {
+  data = Neem_nil();
+  type = Value_type::NIL;
+}
 
 Neem_value::Neem_value(Value_type ptype, double pnum) {
   if (ptype != Value_type::NUMBER) {
-    throw std::runtime_error {"Expected Value_type 'NUMBER'."};
+    throw std::runtime_error {"[Internal] Expected Value_type 'NUMBER'."};
   }
   type = ptype;
-  num = pnum;
+  data = pnum;
 }
 
 Neem_value::Neem_value(Value_type ptype, std::string pstr) {
   if (ptype != Value_type::STRING) {
-    throw std::runtime_error {"Expected Value_type 'STRING'."};
+    throw std::runtime_error {"[Internal] Expected Value_type 'STRING'."};
   }
   type = ptype;
-  str = pstr;
+  data = pstr;
 }
 
 
 Neem_value::Neem_value(Value_type ptype, bool pbool) {
   if (ptype != Value_type::BOOL) {
-      throw std::runtime_error {"Expected Value_type 'BOOL'."};
+      throw std::runtime_error {"[Internal] Expected Value_type 'BOOL'."};
   }
   type = ptype;
-  b00l = pbool;
+  data = pbool;
 }
 
 Value_type Neem_value::get_type() {
@@ -37,46 +41,46 @@ Value_type Neem_value::get_type() {
 std::string Neem_value::get_string() {
   if (type != Value_type::STRING) {
     throw std::runtime_error
-      {"Tried to retrive member 'str' while holding other type of value."};
+      {"[Internal] Tried to retrive member 'str' while holding other type of value."};
   }
-  return str;
+  return std::get<std::string>(data);
 }
 
 double Neem_value::get_number() {
   if (type != Value_type::NUMBER) {
     throw std::runtime_error
-      {"Tried to retrive member 'num' while holding other type of value."};
+      {"[Internal] Tried to retrive member 'num' while holding other type of value."};
   }
-  return num;
+  return std::get<double>(data);
 }
 
 bool Neem_value::get_bool() {
   if (type != Value_type::BOOL) {
     throw std::runtime_error
-      {"Tried to retrive member 'bool' while holding other type of value."};
+      {"[Internal] Tried to retrive member 'bool' while holding other type of value."};
   }
-  return b00l;
+  return std::get<bool>(data);
 }
 
-void Neem_value::put_string(std::string data) {
+void Neem_value::put_string(std::string str) {
   type = Value_type::STRING;
-  str = data;
+  data = str;
 }
 
-void Neem_value::put_number(double data) {
+void Neem_value::put_number(double num) {
   type = Value_type::NUMBER;
-  num = data;
+  data = num;
 }
 
-void Neem_value::put_bool(bool p_b00l) {
+void Neem_value::put_bool(bool b00l) {
   type = Value_type::BOOL;
-  b00l = p_b00l;
+  data = b00l;
 }
 
 std::string Neem_value::to_string() {
   if (type == Value_type::NIL) return "nil";
-  if (type == Value_type::NUMBER) return std::to_string(num);
-  if (type == Value_type::STRING) return str;
-  if (type == Value_type::BOOL) return b00l ? "true" : "false";
+  if (type == Value_type::NUMBER) return std::to_string(get_number());
+  if (type == Value_type::STRING) return get_string();
+  if (type == Value_type::BOOL) return get_bool() ? "true" : "false";
   return "undefined";
 }
