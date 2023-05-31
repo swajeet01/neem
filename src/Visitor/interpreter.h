@@ -13,7 +13,7 @@
 
 class Interpreter: public Mutable_state_visitor {
   std::shared_ptr<Interpreter_error_reporter> error_reporter;
-  Environment environment;
+  std::shared_ptr<Environment>  environment;
   Neem_value data;
   bool is_truthy(Neem_value&);
   bool is_equal(Neem_value& left, Neem_value& right);
@@ -26,9 +26,13 @@ class Interpreter: public Mutable_state_visitor {
   void visit(Var&);
   void visit(Variable&);
   void visit(Assign&);
+  void visit(Block&);
   Neem_value evaluate(std::shared_ptr<Expr>);
+  void execute_block(std::vector<std::shared_ptr<Stmt>>&,
+      std::shared_ptr<Environment>);
   void execute(std::shared_ptr<Stmt>);
 public:
+  Interpreter();
   void interprete(std::vector<std::shared_ptr<Stmt>>);
   void set_error_reporter(std::shared_ptr<Interpreter_error_reporter>);
 };

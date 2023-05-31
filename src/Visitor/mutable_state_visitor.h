@@ -16,6 +16,7 @@ struct Mutable_state_visitor {
   virtual void visit(Var&) = 0;
   virtual void visit(Variable&) = 0;
   virtual void visit(Assign&) = 0;
+  virtual void visit(Block&) = 0;
 };
 
 #endif // !MUTABLE_STATE_VISITOR_H

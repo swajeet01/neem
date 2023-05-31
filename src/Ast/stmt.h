@@ -6,12 +6,19 @@
 #define STMT_H
 
 #include <memory>
+#include <vector>
 
 #include "expr.h"
 #include "../Visitor/mutable_state_visitor.h"
 
 struct Stmt {
 	virtual void accept(Mutable_state_visitor&) = 0;
+};
+
+struct Block: public Stmt {
+	std::vector<std::shared_ptr<Stmt>> statements;
+	Block(std::vector<std::shared_ptr<Stmt>>);
+	void accept(Mutable_state_visitor&);
 };
 
 struct Expression: public Stmt {

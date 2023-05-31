@@ -1,4 +1,5 @@
-%includes   :   memory*, expr.h, ../Visitor/mutable_state_visitor.h
-Expression  :   Expr* expression
-Print       :   Expr* expression
-Var         :   Token name, Expr* initializer
+%includes   =   memory*, vector*, expr.h, ../Visitor/mutable_state_visitor.h
+Block       =   std::vector<std::shared_ptr<Stmt>> statements
+Expression  =   Expr* expression
+Print       =   Expr* expression
+Var         =   Token name, Expr* initializer

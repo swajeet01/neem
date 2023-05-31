@@ -16,6 +16,7 @@ add_library(expr OBJECT
 add_library(stmt OBJECT
   src/Ast/expr.h
   src/Visitor/mutable_state_visitor.h
+  src/Ast/stmt.h
   src/Ast/stmt.cpp)
 
 add_library(interpreter_error_reporter OBJECT
@@ -80,6 +81,7 @@ add_library(ast_printer OBJECT
 
 add_library(interpreter OBJECT
   src/Ast/expr.h
+  src/Ast/stmt.h
   src/Error/neem_runtime_error.h
   src/Error/interpreter_error_reporter.h
   src/common.h

@@ -5,6 +5,7 @@
 #ifndef STMT_FWD_H
 #define STMT_FWD_H
 
+struct Block;
 struct Expression;
 struct Print;
 struct Var;

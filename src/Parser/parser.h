@@ -39,6 +39,7 @@ class Parser {
   std::shared_ptr<Stmt> expr_statement();
   std::shared_ptr<Stmt> declaration();
   std::shared_ptr<Stmt> var_declaration();
+  std::vector<std::shared_ptr<Stmt>> block_statement();
 public:
   Parser(const std::vector<Token>&, std::shared_ptr<Parser_error_reporter>);
   std::vector<std::shared_ptr<Stmt>> parse();

@@ -10,14 +10,17 @@
 #include "../common.h"
 #include "interpreter.h"
 
-void check_number_operand(Token& token, Neem_value& operand) {
-  if (operand.get_type() == Value_type::NUMBER) return;
-  throw Neem_runtime_error {token, "Operand must be a number."};
-}
+Interpreter::Interpreter():
+    environment {std::make_shared<Environment>()} {}
 
 void Interpreter::set_error_reporter(
     std::shared_ptr<Interpreter_error_reporter> new_error_reporter) {
   error_reporter = new_error_reporter;
+}
+
+void check_number_operand(Token& token, Neem_value& operand) {
+  if (operand.get_type() == Value_type::NUMBER) return;
+  throw Neem_runtime_error {token, "Operand must be a number."};
 }
 
 void check_number_operand(Token& token, Neem_value& left, Neem_value& right) {
@@ -169,18 +172,34 @@ void Interpreter::visit(Var& stmt) {
   if (stmt.initializer) {
     value = evaluate(stmt.initializer);
   }
-  environment.define(stmt.name.lexeme, value);
+  environment->define(stmt.name.lexeme, value);
   data = Neem_value();
 }
 
 void Interpreter::visit(Variable& expr) {
-  data = environment.get(expr.name);
+  data = environment->get(expr.name);
 }
 
 void Interpreter::visit(Assign& expr) {
   auto value = evaluate(expr.value);
-  environment.assign(expr.name, value);
+  environment->assign(expr.name, value);
   data = value;
+}
+
+void Interpreter::visit(Block& stmt) {
+  execute_block(stmt.statements, std::make_shared<Environment>(environment));
+  data = Neem_value();
+}
+
+
+void Interpreter::execute_block(std::vector<std::shared_ptr<Stmt>>& statements,
+    std::shared_ptr<Environment> p_environment) {
+  auto previous = environment;
+  environment = p_environment;
+  for (auto statement: statements) {
+    execute(statement);
+  }
+  environment = previous;
 }
 
 void Interpreter::execute(std::shared_ptr<Stmt> statement) {

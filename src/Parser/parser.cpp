@@ -199,6 +199,9 @@ std::shared_ptr<Stmt> Parser::statement() {
   if (match({Token_type::PRINT})) {
     return print_statement();
   }
+  if (match({Token_type::LEFT_BRACE})) {
+    return std::make_shared<Block>(block_statement());
+  }
   return expr_statement();
 }
 
@@ -212,6 +215,15 @@ std::shared_ptr<Stmt> Parser::expr_statement() {
   auto expr = expression();
   consume(Token_type::SEMI_COL, "Expected ';' after expression.");
   return std::make_shared<Expression>(expr);
+}
+
+std::vector<std::shared_ptr<Stmt>> Parser::block_statement() {
+  std::vector<std::shared_ptr<Stmt>> statements;
+  while (!check(Token_type::RIGHT_BRACE) && !is_at_end()) {
+    statements.push_back(declaration());
+  }
+  consume(Token_type::RIGHT_BRACE, "Expected '}' after block.");
+  return statements;
 }
 
 std::shared_ptr<Stmt> Parser::declaration() {
