@@ -6,17 +6,9 @@
 
 enum class Value_type {NUMBER, STRING, BOOL, NIL};
 
-class Neem_nil {};
-
 class Neem_value {
   Value_type type;
-
-  //  double num;
-  //  std::string str;
-  //  bool b00l;
-
-  std::variant<double, bool, std::string, Neem_nil> data;
-
+  std::variant<double, bool, std::string, std::monostate> data;
   void clear_all();
 public:
   Neem_value();

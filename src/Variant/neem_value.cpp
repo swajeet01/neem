@@ -5,7 +5,7 @@
 #include "neem_value.h"
 
 Neem_value::Neem_value() {
-  data = Neem_nil();
+  data = std::monostate {};
   type = Value_type::NIL;
 }
 
