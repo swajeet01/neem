@@ -104,8 +104,8 @@ Hello User!
 ```
 
 In current state, Neem only supports assignment and print statements,
-mathematical and logical expressions, statements and state, scopes.
-more language features will be implemented soon.
+mathematical and logical expressions and scopes. More language features
+will be implemented soon.
 
 ## Work in Progress!
 
