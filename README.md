@@ -1,6 +1,4 @@
-<p align="center">
-    <img height="144" src="https://imgur.com/sitRo48.png" alt="Neem logo">
-</p>
+<img src="https://github.com/swajeet01/neem/assets/47481301/174eb7c4-a741-42dd-a3a5-70706abbebc1" alt="Neem logo" width="200" >
 
 # Neem Programming Language
 
@@ -24,7 +22,7 @@ development.
 - [x] Representing code 
 - [x] Parsing expressions
 - [x] Evaluating expressions
-- [ ] Statements and state \[WIP\]
+- [x] Statements and state
 - [ ] Control flow
 - [ ] Functions
 - [ ] Resolving and binding
@@ -54,13 +52,13 @@ the file should specify AST classes in this format-
 
 - A line starting with `%includes` specifies the files to be included in
 generated source files.
-- `%includes` must be followed by a ':' followed by list of header file to
+- `%includes` must be followed by a '=' followed by list of header file to
 include, if a header file is a standard header, its name must be followed
 by '\*'.
 - Each line not starting with `%` must describe a single AST class.
-- Each line not starting with `%` must start with a name of an AST class.
-- Class name must be followed by a ':' separated by whitespace.
-- Following the ':', a class member list separated from ':' by whitespace must
+- Lines describing an AST class must start with a name for that AST class.
+- Class name must be followed by a '=' separated by whitespace.
+- Following the '=', a class member list separated from '=' by whitespace must
 describe the members of the AST class on same line.
 - Each class member must be described with its type following by member name
 separated by whitespace.
@@ -106,8 +104,8 @@ Hello User!
 ```
 
 In current state, Neem only supports assignment and print statements,
-mathematical and logical expressions. more language features will be
-implemented soon.
+mathematical and logical expressions, statements and state, scopes.
+more language features will be implemented soon.
 
 ## Work in Progress!
 
