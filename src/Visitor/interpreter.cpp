@@ -203,14 +203,6 @@ void Interpreter::visit(Block& stmt) {
   data = Neem_value();
 }
 
-std::shared_ptr<Environment> Interpreter::get_environment() {
-  return environment;
-}
-
-void Interpreter::set_environment(std::shared_ptr<Environment> p_environment) {
-  environment = p_environment;
-}
-
 void Interpreter::execute_block(std::vector<std::shared_ptr<Stmt>>& statements,
     std::shared_ptr<Environment> p_environment) {
   auto previous = environment;
