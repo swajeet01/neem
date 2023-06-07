@@ -45,6 +45,13 @@ void Ast_literal::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(*this);
 }
 
+Logical::Logical(std::shared_ptr<Expr> p_left, Token p_op, std::shared_ptr<Expr> p_right):
+	left {p_left}, op {p_op}, right {p_right} {}
+
+void Logical::accept(Mutable_state_visitor& visitor) {
+	visitor.visit(*this);
+}
+
 Variable::Variable(Token p_name):
 	name {p_name} {}
 

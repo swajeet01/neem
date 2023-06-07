@@ -27,6 +27,14 @@ struct Expression: public Stmt {
 	void accept(Mutable_state_visitor&);
 };
 
+struct If: public Stmt {
+	std::shared_ptr<Expr> condition;
+	std::shared_ptr<Stmt> then_branch;
+	std::shared_ptr<Stmt> else_branch;
+	If(std::shared_ptr<Expr>, std::shared_ptr<Stmt>, std::shared_ptr<Stmt>);
+	void accept(Mutable_state_visitor&);
+};
+
 struct Print: public Stmt {
 	std::shared_ptr<Expr> expression;
 	Print(std::shared_ptr<Expr>);
@@ -37,6 +45,13 @@ struct Var: public Stmt {
 	Token name;
 	std::shared_ptr<Expr> initializer;
 	Var(Token, std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&);
+};
+
+struct While: public Stmt {
+	std::shared_ptr<Expr> condition;
+	std::shared_ptr<Stmt> body;
+	While(std::shared_ptr<Expr>, std::shared_ptr<Stmt>);
 	void accept(Mutable_state_visitor&);
 };
 

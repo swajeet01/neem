@@ -49,6 +49,14 @@ struct Ast_literal: public Expr {
 	void accept(Mutable_state_visitor&);
 };
 
+struct Logical: public Expr {
+	std::shared_ptr<Expr> left;
+	Token op;
+	std::shared_ptr<Expr> right;
+	Logical(std::shared_ptr<Expr>, Token, std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&);
+};
+
 struct Variable: public Expr {
 	Token name;
 	Variable(Token);

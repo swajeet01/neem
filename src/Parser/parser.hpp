@@ -34,9 +34,13 @@ class Parser {
   std::shared_ptr<Expr> factor();
   std::shared_ptr<Expr> unary();
   std::shared_ptr<Expr> primary();
+  std::shared_ptr<Expr> logical_or();
+  std::shared_ptr<Expr> logical_and();
   std::shared_ptr<Stmt> statement();
   std::shared_ptr<Stmt> print_statement();
   std::shared_ptr<Stmt> expr_statement();
+  std::shared_ptr<Stmt> if_statement();
+  std::shared_ptr<Stmt> while_statement();
   std::shared_ptr<Stmt> declaration();
   std::shared_ptr<Stmt> var_declaration();
   std::vector<std::shared_ptr<Stmt>> block_statement();

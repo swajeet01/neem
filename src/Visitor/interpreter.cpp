@@ -198,8 +198,43 @@ void Interpreter::visit(Assign& expr) {
   data = value;
 }
 
+void Interpreter::visit(Logical& expr) {
+  auto left = evaluate(expr.left);
+  if (expr.op.type == Token_type::OR) {
+    if (is_truthy(left)) {
+      data = left;
+      return;
+    }
+  } else {
+    if (!is_truthy(left)) {
+      data = left;
+      return;
+    }
+  }
+  data = evaluate(expr.right);
+}
+
 void Interpreter::visit(Block& stmt) {
   execute_block(stmt.statements, std::make_shared<Environment>(environment));
+  data = Neem_value();
+}
+
+void Interpreter::visit(If& stmt) {
+  auto condition_value = evaluate(stmt.condition);
+  if (is_truthy(condition_value)) {
+    execute(stmt.then_branch);
+  } else if (stmt.else_branch) {
+    execute(stmt.else_branch);
+  }
+  data = Neem_value();
+}
+
+void Interpreter::visit(While& stmt) {
+  auto condition_value = evaluate(stmt.condition);
+  while (is_truthy(condition_value)) {
+    execute(stmt.body);
+    condition_value = evaluate(stmt.condition);
+  }
   data = Neem_value();
 }
 

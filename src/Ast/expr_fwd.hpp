@@ -10,6 +10,7 @@ struct Binary;
 struct Grouping;
 struct Unary;
 struct Ast_literal;
+struct Logical;
 struct Variable;
 
 #endif

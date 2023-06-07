@@ -46,10 +46,8 @@ bool Parser::match(std::initializer_list<Token_type> types) {
 
 void Parser::synchronize() {
   advance();
-
   while (!is_at_end()) {
     if (previous().type == Token_type::SEMI_COL) return;
-
     switch (peek().type) {
       case Token_type::STRUCT:
       case Token_type::FN:
@@ -61,9 +59,7 @@ void Parser::synchronize() {
       case Token_type::RETURN:
       return;
     }
-
     advance();
-
   }
 }
 
@@ -175,7 +171,7 @@ std::shared_ptr<Expr> Parser::equality() {
 }
 
 std::shared_ptr<Expr> Parser::assignment() {
-  auto expr = equality();
+  auto expr = logical_or();
   if (match({Token_type::EQ})) {
     Token equals = previous();
     auto value = assignment();
@@ -195,14 +191,60 @@ std::shared_ptr<Expr> Parser::expression() {
   return assignment();
 }
 
+std::shared_ptr<Expr> Parser::logical_or() {
+  auto expr = logical_and();
+  while (match({Token_type::OR})) {
+    auto op = previous();
+    auto right = logical_and();
+    expr = std::make_shared<Logical>(expr, op, right);
+  }
+  return expr;
+}
+
+std::shared_ptr<Expr> Parser::logical_and() {
+  auto expr = equality();
+  while (match({Token_type::AND})) {
+    auto op = previous();
+    auto right = equality();
+    expr = std::make_shared<Logical>(expr, op, right);
+  }
+  return expr;
+}
+
 std::shared_ptr<Stmt> Parser::statement() {
+  if (match({Token_type::IF})) {
+    return if_statement();
+  }
   if (match({Token_type::PRINT})) {
     return print_statement();
+  }
+  if (match({Token_type::WHILE})) {
+    return while_statement();
   }
   if (match({Token_type::LEFT_BRACE})) {
     return std::make_shared<Block>(block_statement());
   }
   return expr_statement();
+}
+
+std::shared_ptr<Stmt> Parser::if_statement() {
+  consume(Token_type::LEFT_PAREN, "Expected '(' after 'if'.");
+  auto condition = expression();
+  consume(Token_type::RIGHT_PAREN, "Expected ')' after if condition.");
+  auto then_branch = statement();
+  auto else_branch = std::shared_ptr<Stmt> {};
+  if (match({Token_type::ELSE})) {
+    else_branch = statement();
+  }
+  return std::make_shared<If>(condition, then_branch, else_branch);
+}
+
+std::shared_ptr<Stmt> Parser::while_statement() {
+  consume(Token_type::LEFT_PAREN, "Expected '(' after 'while'.");
+  auto condition = expression();
+  consume(Token_type::RIGHT_PAREN, "Expected ')' after while condition.");
+  auto body = statement();
+  return std::make_shared<While>(condition, body);
 }
 
 std::shared_ptr<Stmt> Parser::print_statement() {

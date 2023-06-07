@@ -27,6 +27,9 @@ class Interpreter: public Mutable_state_visitor {
   void visit(Variable&);
   void visit(Assign&);
   void visit(Block&);
+  void visit(If&);
+  void visit(Logical&);
+  void visit(While&);
   Neem_value evaluate(std::shared_ptr<Expr>);
   void execute_block(std::vector<std::shared_ptr<Stmt>>&,
       std::shared_ptr<Environment>);

@@ -7,7 +7,9 @@
 
 struct Block;
 struct Expression;
+struct If;
 struct Print;
 struct Var;
+struct While;
 
 #endif
