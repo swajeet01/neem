@@ -7,11 +7,11 @@
 #include <string>
 #include <vector>
 
-#include "../Token/token.h"
-#include "../Ast/expr.h"
-#include "../Ast/stmt.h"
-#include "../Error/parse_error.h"
-#include "../Error/parser_error_reporter.h"
+#include "../Token/token.hpp"
+#include "../Ast/expr.hpp"
+#include "../Ast/stmt.hpp"
+#include "../Error/parse_error.hpp"
+#include "../Error/parser_error_reporter.hpp"
 
 class Parser {
   std::vector<Token> tokens;

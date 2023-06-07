@@ -3,12 +3,12 @@
 #include <iostream>
 #include <vector>
 
-#include "../Ast/expr.h"
-#include "../Ast/stmt.h"
-#include "../Error/neem_runtime_error.h"
-#include "../Error/interpreter_error_reporter.h"
-#include "../common.h"
-#include "interpreter.h"
+#include "../Ast/expr.hpp"
+#include "../Ast/stmt.hpp"
+#include "../Error/neem_runtime_error.hpp"
+#include "../Error/interpreter_error_reporter.hpp"
+#include "../common.hpp"
+#include "interpreter.hpp"
 
 Interpreter::Interpreter():
     environment {std::make_shared<Environment>()} {}

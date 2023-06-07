@@ -4,8 +4,8 @@
 #include <memory>
 #include <string>
 
-#include "token_type.h"
-#include "../Variant/literal.h"
+#include "token_type.hpp"
+#include "../Variant/literal.hpp"
 
 class Token {
 public:

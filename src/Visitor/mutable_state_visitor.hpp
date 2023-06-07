@@ -1,8 +1,8 @@
 #ifndef MUTABLE_STATE_VISITOR_H
 #define MUTABLE_STATE_VISITOR_H
 
-#include "../Ast/expr_fwd.h"
-#include "../Ast/stmt_fwd.h"
+#include "../Ast/expr_fwd.hpp"
+#include "../Ast/stmt_fwd.hpp"
 
 #include <memory>
 

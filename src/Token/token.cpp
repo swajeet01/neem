@@ -1,10 +1,10 @@
 #include <memory>
 #include <string>
 
-#include "../common.h"
-#include "token.h"
-#include "token_type.h"
-#include "../Variant/literal.h"
+#include "../common.hpp"
+#include "token.hpp"
+#include "token_type.hpp"
+#include "../Variant/literal.hpp"
 
 Token::Token(const std::string plexeme, int pline, Token_type ptype,
     Literal pliteral):

@@ -5,8 +5,8 @@
 #include <string>
 #include <memory>
 
-#include "../Ast/expr.h"
-#include "mutable_state_visitor.h"
+#include "../Ast/expr.hpp"
+#include "mutable_state_visitor.hpp"
 
 class Ast_printer: public Mutable_state_visitor {
   std::string data;

@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "../Token/token.h"
-#include "error_reporter.h"
-#include "neem_runtime_error.h"
+#include "../Token/token.hpp"
+#include "error_reporter.hpp"
+#include "neem_runtime_error.hpp"
 
 class Interpreter_error_reporter: public Error_reporter {
   bool fhad_error;

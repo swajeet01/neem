@@ -2,8 +2,8 @@
 #include <memory>
 #include <string>
 
-#include "../common.h"
-#include "parser_error_reporter.h"
+#include "../common.hpp"
+#include "parser_error_reporter.hpp"
 
 
 bool Parser_error_reporter::had_error() {

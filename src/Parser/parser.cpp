@@ -3,10 +3,10 @@
 #include <string>
 #include <vector>
 
-#include "../Token/token.h"
-#include "../Ast/expr.h"
-#include "../Ast/stmt.h"
-#include "parser.h"
+#include "../Token/token.hpp"
+#include "../Ast/expr.hpp"
+#include "../Ast/stmt.hpp"
+#include "parser.hpp"
 
 Parser::Parser(const std::vector<Token>& p_tokens,
     std::shared_ptr<Parser_error_reporter> p_error_reporter):

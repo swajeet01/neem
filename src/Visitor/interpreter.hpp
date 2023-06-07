@@ -4,12 +4,12 @@
 #include <memory>
 #include <vector>
 
-#include "../Ast/expr.h"
-#include "../Ast/stmt.h"
-#include "../Environment/environment.h"
-#include "../Variant/neem_value.h"
-#include "mutable_state_visitor.h"
-#include "../Error/interpreter_error_reporter.h"
+#include "../Ast/expr.hpp"
+#include "../Ast/stmt.hpp"
+#include "../Environment/environment.hpp"
+#include "../Variant/neem_value.hpp"
+#include "mutable_state_visitor.hpp"
+#include "../Error/interpreter_error_reporter.hpp"
 
 class Interpreter: public Mutable_state_visitor {
   std::shared_ptr<Interpreter_error_reporter> error_reporter;

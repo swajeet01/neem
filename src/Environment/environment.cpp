@@ -1,9 +1,9 @@
 #include <memory>
 #include <string>
 
-#include "../Error/neem_runtime_error.h"
-#include "../Token/token.h"
-#include "environment.h"
+#include "../Error/neem_runtime_error.hpp"
+#include "../Token/token.hpp"
+#include "environment.hpp"
 
 Environment::Environment(std::shared_ptr<Environment> p_enclosing):
     enclosing {p_enclosing} {}

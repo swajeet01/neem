@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <variant>
 
-#include "literal.h"
+#include "literal.hpp"
 
 Literal::Literal() {
   data = std::monostate {};

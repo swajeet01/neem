@@ -3,15 +3,15 @@
 #include <string>
 #include <fstream>
 
-#include "Error/error_reporter.h"
-#include "Error/interpreter_error_reporter.h"
-#include "Error/lexer_error_reporter.h"
-#include "Error/parser_error_reporter.h"
-#include "Visitor/interpreter.h"
-#include "common.h"
-#include "Lexer/lexer.h"
-#include "Parser/parser.h"
-#include "Visitor/ast_printer.h"
+#include "Error/error_reporter.hpp"
+#include "Error/interpreter_error_reporter.hpp"
+#include "Error/lexer_error_reporter.hpp"
+#include "Error/parser_error_reporter.hpp"
+#include "Visitor/interpreter.hpp"
+#include "common.hpp"
+#include "Lexer/lexer.hpp"
+#include "Parser/parser.hpp"
+#include "Visitor/ast_printer.hpp"
 
 int run(const std::string source) {
 

@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "error_reporter.h"
+#include "error_reporter.hpp"
 
 class Lexer_error_reporter: public Error_reporter {
   bool fhad_error;

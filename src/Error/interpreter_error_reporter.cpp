@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 
-#include "../common.h"
-#include "neem_runtime_error.h"
-#include "interpreter_error_reporter.h"
+#include "../common.hpp"
+#include "neem_runtime_error.hpp"
+#include "interpreter_error_reporter.hpp"
 
 void Interpreter_error_reporter::report(int line, std::string where,
     std::string message) {

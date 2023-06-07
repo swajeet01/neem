@@ -1,4 +1,4 @@
-%includes       =   memory*, ../Token/token.h, ../Variant/literal.h, ../Visitor/mutable_state_visitor.h
+%includes       =   memory*, ../Token/token.hpp, ../Variant/literal.hpp, ../Visitor/mutable_state_visitor.hpp
 Assign          =   Token name, Expr* value
 Binary          =   Expr* left, Token op, Expr* right
 Grouping        =   Expr* expr

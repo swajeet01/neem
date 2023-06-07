@@ -2,8 +2,8 @@
 #include <memory>
 #include <string>
 
-#include "../Ast/expr.h"
-#include "ast_printer.h"
+#include "../Ast/expr.hpp"
+#include "ast_printer.hpp"
 
 std::string Ast_printer::print(std::shared_ptr<Expr> expr) {
   expr->accept(*this);
