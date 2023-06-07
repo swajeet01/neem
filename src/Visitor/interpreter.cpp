@@ -156,6 +156,7 @@ bool Interpreter::is_equal(Neem_value& left, Neem_value& right) {
   if (left.get_type() != right.get_type()) {
     return false;
   }
+
   switch (left.get_type()) {
     case Value_type::NUMBER:
       return left.get_number() == right.get_number();
@@ -202,15 +203,27 @@ void Interpreter::visit(Block& stmt) {
   data = Neem_value();
 }
 
+std::shared_ptr<Environment> Interpreter::get_environment() {
+  return environment;
+}
+
+void Interpreter::set_environment(std::shared_ptr<Environment> p_environment) {
+  environment = p_environment;
+}
 
 void Interpreter::execute_block(std::vector<std::shared_ptr<Stmt>>& statements,
     std::shared_ptr<Environment> p_environment) {
   auto previous = environment;
-  environment = p_environment;
-  for (auto statement: statements) {
-    execute(statement);
+  try {
+    environment = p_environment;
+    for (auto statement: statements) {
+      execute(statement);
+    }
+    environment = previous;
+  } catch(Neem_runtime_error& err) {
+    environment = previous;
+    throw err;
   }
-  environment = previous;
 }
 
 void Interpreter::execute(std::shared_ptr<Stmt> statement) {

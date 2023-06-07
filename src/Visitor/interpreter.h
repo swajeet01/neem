@@ -35,6 +35,8 @@ public:
   Interpreter();
   void interprete(std::vector<std::shared_ptr<Stmt>>);
   void set_error_reporter(std::shared_ptr<Interpreter_error_reporter>);
+  std::shared_ptr<Environment> get_environment();
+  void set_environment(std::shared_ptr<Environment>);
 };
 
 #endif // !INTERPRETER_H
