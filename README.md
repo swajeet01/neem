@@ -1,5 +1,7 @@
 <img src="https://github.com/swajeet01/neem/assets/47481301/174eb7c4-a741-42dd-a3a5-70706abbebc1" alt="Neem logo" width="200" >
 
+[![Build](https://github.com/swajeet01/neem/actions/workflows/cmake.yml/badge.svg)](https://github.com/swajeet01/neem/actions/workflows/cmake.yml)
+
 # Neem Programming Language
 
 A C++ port and extension of
