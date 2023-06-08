@@ -23,11 +23,13 @@ development.
 - [x] Parsing expressions
 - [x] Evaluating expressions
 - [x] Statements and state
-- [ ] Control flow
+- [x] Control flow
 - [ ] Functions
 - [ ] Resolving and binding
 - [ ] Structs
 - [ ] Arrays/Lists
+- [ ] Continue/Break support
+- [ ] For-in loop support
 
 ## Build and run
 
@@ -104,8 +106,8 @@ Hello User!
 ```
 
 In current state, Neem only supports assignment and print statements,
-mathematical and logical expressions and scopes. More language features
-will be implemented soon.
+mathematical and logical expressions, scopes, while and for loops.
+More language features will be implemented soon.
 
 ## Work in Progress!
 

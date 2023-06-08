@@ -82,5 +82,6 @@ std::string Neem_value::to_string() {
   if (type == Value_type::NUMBER) return std::to_string(get_number());
   if (type == Value_type::STRING) return get_string();
   if (type == Value_type::BOOL) return get_bool() ? "true" : "false";
+  // Unreachable
   return "undefined";
 }

@@ -40,6 +40,7 @@ class Parser {
   std::shared_ptr<Stmt> print_statement();
   std::shared_ptr<Stmt> expr_statement();
   std::shared_ptr<Stmt> if_statement();
+  std::shared_ptr<Stmt> for_statement();
   std::shared_ptr<Stmt> while_statement();
   std::shared_ptr<Stmt> declaration();
   std::shared_ptr<Stmt> var_declaration();

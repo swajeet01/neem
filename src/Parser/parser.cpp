@@ -1,3 +1,4 @@
+#include <cmath>
 #include <initializer_list>
 #include <memory>
 #include <string>
@@ -212,6 +213,9 @@ std::shared_ptr<Expr> Parser::logical_and() {
 }
 
 std::shared_ptr<Stmt> Parser::statement() {
+  if (match({Token_type::FOR})) {
+    return for_statement();
+  }
   if (match({Token_type::IF})) {
     return if_statement();
   }
@@ -245,6 +249,52 @@ std::shared_ptr<Stmt> Parser::while_statement() {
   consume(Token_type::RIGHT_PAREN, "Expected ')' after while condition.");
   auto body = statement();
   return std::make_shared<While>(condition, body);
+}
+
+std::shared_ptr<Stmt> Parser::for_statement() {
+
+  consume(Token_type::LEFT_PAREN, "Expected '(' after 'for'.");
+  auto initializer = std::shared_ptr<Stmt> {};
+  if (match({Token_type::SEMI_COL})) {
+    // Do nothing.
+    // initializer = nullptr
+  } else if (match({Token_type::LET})) {
+    initializer = var_declaration();
+  } else {
+    initializer = expr_statement();
+  }
+
+  auto condition = std::shared_ptr<Expr> {};
+  if (!check(Token_type::SEMI_COL)) {
+    condition = expression();
+  }
+  consume(Token_type::SEMI_COL, "Expected ';' after loop condition.");
+
+  auto increment = std::shared_ptr<Expr> {};
+  if (!check(Token_type::RIGHT_PAREN)) {
+    increment = expression();
+  }
+  consume(Token_type::RIGHT_PAREN, "Expected ')' after loop clauses.");
+
+  auto body = statement();
+
+  if (increment) {
+    std::vector<std::shared_ptr<Stmt>> new_body {body, std::make_shared<Expression>(increment)};
+    body = std::make_shared<Block>(new_body);
+  }
+
+  if (!condition) {
+    condition = std::make_shared<Ast_literal>(Literal {Literal_type::BOOL, true});
+  }
+
+  body = std::make_shared<While>(condition, body);
+
+  if (initializer) {
+    std::vector<std::shared_ptr<Stmt>> new_body {initializer, body};
+    body = std::make_shared<Block>(new_body);
+  }
+
+  return body;
 }
 
 std::shared_ptr<Stmt> Parser::print_statement() {
