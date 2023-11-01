@@ -1,5 +1,15 @@
 <img src="https://github.com/swajeet01/neem/assets/47481301/174eb7c4-a741-42dd-a3a5-70706abbebc1" alt="Neem logo" width="200" >
 
+__Hello everyone. This is Swajeet Swarnkar, author of this repo. I wanted to
+provide you with an update regarding Neem. Unfortunately, I am very busy
+pursuing my postgraduate program, which demands my full attention and
+dedication.__
+
+__As a result I will not be able to finish this project in near future.
+However, I want to assure you my deep interest in _Theory of Computation_ and 
+_Compiler Design_ remains, unwavering. I have ambitions to finish this project
+and do many similar projects in future. Till then :wave:.__
+
 [![Build](https://github.com/swajeet01/neem/actions/workflows/cmake.yml/badge.svg)](https://github.com/swajeet01/neem/actions/workflows/cmake.yml)
 
 # Neem Programming Language
