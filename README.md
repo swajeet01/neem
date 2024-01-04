@@ -1,14 +1,14 @@
 <img src="https://github.com/swajeet01/neem/assets/47481301/174eb7c4-a741-42dd-a3a5-70706abbebc1" alt="Neem logo" width="200" >
 
-__Hello everyone. This is Swajeet Swarnkar, author of this repo. I wanted to
+Hello everyone. This is Swajeet Swarnkar, author of this repo. I wanted to
 provide you with an update regarding Neem. Unfortunately, I am very busy
 pursuing my postgraduate program, which demands my full attention and
-dedication.__
+dedication.
 
-__As a result I will not be able to finish this project in near future.
+As a result I will not be able to finish this project in near future.
 However, I want to assure you my deep interest in _Theory of Computation_ and 
 _Compiler Design_ remains, unwavering. I have ambitions to finish this project
-and do many similar projects in future. Till then :wave:.__
+and do many similar projects in future. Till then :wave:.
 
 [![Build](https://github.com/swajeet01/neem/actions/workflows/cmake.yml/badge.svg)](https://github.com/swajeet01/neem/actions/workflows/cmake.yml)
 
@@ -27,6 +27,12 @@ refactored and optimized later.
 
 :warning: Neem is not complete yet and is currently under continuous
 development.
+
+## Quick tasks
+
+- [ ] Redesign + Refactor to avoid excessive use of `shared_ptr`.
+- [ ] Implement a simple block executor for executing blocks without relying
+      on finally-like functionality.
 
 ## Progress
 
