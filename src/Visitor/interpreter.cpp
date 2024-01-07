@@ -3,11 +3,11 @@
 #include <iostream>
 #include <vector>
 
-#include "../Ast/expr.hpp"
-#include "../Ast/stmt.hpp"
-#include "../Error/neem_runtime_error.hpp"
-#include "../Error/interpreter_error_reporter.hpp"
-#include "../common.hpp"
+#include "Ast/expr.hpp"
+#include "Ast/stmt.hpp"
+#include "Error/neem_runtime_error.hpp"
+#include "Error/interpreter_error_reporter.hpp"
+#include "common.hpp"
 #include "interpreter.hpp"
 
 Interpreter::Interpreter():

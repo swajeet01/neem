@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../Token/token.hpp"
+#include "Token/token.hpp"
 #include "error_reporter.hpp"
 #include "neem_runtime_error.hpp"
 

@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 
-#include "../Token/token.hpp"
-#include "../Ast/expr.hpp"
-#include "../Ast/stmt.hpp"
+#include "Token/token.hpp"
+#include "Ast/expr.hpp"
+#include "Ast/stmt.hpp"
 #include "parser.hpp"
 
 Parser::Parser(const std::vector<Token>& p_tokens,

@@ -5,7 +5,7 @@
 #include <string>
 
 #include "token_type.hpp"
-#include "../Variant/literal.hpp"
+#include "Variant/literal.hpp"
 
 class Token {
 public:

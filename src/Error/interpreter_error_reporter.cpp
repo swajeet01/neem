@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "../common.hpp"
+#include "common.hpp"
 #include "neem_runtime_error.hpp"
 #include "interpreter_error_reporter.hpp"
 

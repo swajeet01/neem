@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 
-#include "../common.hpp"
+#include "common.hpp"
 #include "parser_error_reporter.hpp"
 
 

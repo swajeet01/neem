@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "../common.hpp"
+#include "common.hpp"
 #include "lexer_error_reporter.hpp"
 
 void Lexer_error_reporter::error(int line, std::string message) {

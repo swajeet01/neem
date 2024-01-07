@@ -5,9 +5,9 @@
 #include <string>
 #include <vector>
 
-#include "../Token/token.hpp"
-#include "../Error/lexer_error_reporter.hpp"
-#include "../Variant/literal.hpp"
+#include "Token/token.hpp"
+#include "Error/lexer_error_reporter.hpp"
+#include "Variant/literal.hpp"
 
 class Lexer {
   std::string source;

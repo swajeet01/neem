@@ -5,8 +5,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "../Token/token.hpp"
-#include "../Variant/neem_value.hpp"
+#include "Token/token.hpp"
+#include "Variant/neem_value.hpp"
 
 class Environment {
   std::shared_ptr<Environment> enclosing;

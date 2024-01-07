@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "../Token/token.hpp"
+#include "Token/token.hpp"
 #include "neem_runtime_error.hpp"
 
 Neem_runtime_error::Neem_runtime_error(Token ptoken, std::string message):

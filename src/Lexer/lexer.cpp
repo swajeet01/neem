@@ -5,12 +5,12 @@
 #include <memory>
 #include <iostream>
 
-#include "../common.hpp"
+#include "common.hpp"
 #include "lexer.hpp"
-#include "../Token/token.hpp"
-#include "../Token/token_type.hpp"
-#include "../Error/error_reporter.hpp"
-#include "../Variant/literal.hpp"
+#include "Token/token.hpp"
+#include "Token/token_type.hpp"
+#include "Error/error_reporter.hpp"
+#include "Variant/literal.hpp"
 
 static const std::unordered_map<std::string, Token_type> keywords {
   {"let", Token_type::LET},

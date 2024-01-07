@@ -5,7 +5,7 @@
 #include <string>
 
 #include "error_reporter.hpp"
-#include "../Token/token.hpp"
+#include "Token/token.hpp"
 
 class Parser_error_reporter: public Error_reporter {
   bool fhad_error;
