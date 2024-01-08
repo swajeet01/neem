@@ -12,7 +12,7 @@
 #include "Error/interpreter_error_reporter.hpp"
 
 class Interpreter: public Mutable_state_visitor {
-  std::shared_ptr<Interpreter_error_reporter> error_reporter;
+  Interpreter_error_reporter& error_reporter;
   std::shared_ptr<Environment>  environment;
   Neem_value data;
   bool is_truthy(Neem_value&);
@@ -35,9 +35,9 @@ class Interpreter: public Mutable_state_visitor {
       std::shared_ptr<Environment>);
   void execute(std::shared_ptr<Stmt>);
 public:
-  Interpreter();
+  Interpreter(Interpreter_error_reporter&);
   void interprete(std::vector<std::shared_ptr<Stmt>>);
-  void set_error_reporter(std::shared_ptr<Interpreter_error_reporter>);
+  Interpreter_error_reporter& get_error_reporter();
 };
 
 #endif // !INTERPRETER_H

@@ -10,12 +10,12 @@
 #include "common.hpp"
 #include "interpreter.hpp"
 
-Interpreter::Interpreter():
+Interpreter::Interpreter(Interpreter_error_reporter& perror_reporter):
+    error_reporter {perror_reporter},
     environment {std::make_shared<Environment>()} {}
 
-void Interpreter::set_error_reporter(
-    std::shared_ptr<Interpreter_error_reporter> new_error_reporter) {
-  error_reporter = new_error_reporter;
+Interpreter_error_reporter& Interpreter::get_error_reporter() {
+  return error_reporter;
 }
 
 void check_number_operand(Token& token, Neem_value& operand) {
@@ -263,6 +263,6 @@ void Interpreter::interprete(std::vector<std::shared_ptr<Stmt>> statements) {
       execute(statement);
     }
   } catch (Neem_runtime_error err) {
-    error_reporter->error(err);
+    error_reporter.error(err);
   }
 }

@@ -16,7 +16,7 @@
 class Parser {
   std::vector<Token> tokens;
   size_t current = 0;
-  std::shared_ptr<Parser_error_reporter> error_reporter;
+  Parser_error_reporter& error_reporter;
   bool match(std::initializer_list<Token_type>);
   std::shared_ptr<Expr> comparison();
   const Token& previous();
@@ -46,7 +46,7 @@ class Parser {
   std::shared_ptr<Stmt> var_declaration();
   std::vector<std::shared_ptr<Stmt>> block_statement();
 public:
-  Parser(const std::vector<Token>&, std::shared_ptr<Parser_error_reporter>);
+  Parser(const std::vector<Token>&, Parser_error_reporter&);
   std::vector<std::shared_ptr<Stmt>> parse();
 };
 

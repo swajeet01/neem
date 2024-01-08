@@ -7,7 +7,7 @@
 
 
 bool Parser_error_reporter::had_error() {
-  return fhad_error;
+  return mhad_error;
 }
 
 void Parser_error_reporter::error(const Token& token,
@@ -23,5 +23,5 @@ void Parser_error_reporter::report(int line, std::string where,
       std::string message) {
   std::cerr << line << "| Parse error: " << message << common::newl <<
       where << common::newl;
-  fhad_error = true;
+  mhad_error = true;
 }

@@ -7,6 +7,7 @@ class Error_reporter {
 public:
   virtual void report(int, std::string, std::string) = 0;
   virtual bool had_error() = 0;
+  virtual ~Error_reporter() {} 
 };
 
 #endif // !ERROR_REPORTER_H

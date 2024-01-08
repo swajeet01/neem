@@ -33,8 +33,8 @@ static const std::unordered_map<std::string, Token_type> keywords {
   {"print", Token_type::PRINT}
 };
 
-Lexer::Lexer(const std::string psource,
-             std::shared_ptr<Lexer_error_reporter> perror_reporter):
+Lexer::Lexer(const std::string& psource,
+            Lexer_error_reporter& perror_reporter):
     source {psource},
     error_reporter {perror_reporter} {}
 
@@ -87,7 +87,7 @@ void Lexer::string_tk() {
 
   // If allowing multiline strings
   if (is_at_end()) {
-    error_reporter->error(line, "Unterminated string literal.");
+    error_reporter.error(line, "Unterminated string literal.");
     return;
   } 
 
@@ -185,7 +185,7 @@ void Lexer::get_token() {
       } else if (isalpha(c)) {
         identifier();
       } else {
-        error_reporter->error(line, "Unexpected character.");
+        error_reporter.error(line, "Unexpected character.");
       }
       break;
   }

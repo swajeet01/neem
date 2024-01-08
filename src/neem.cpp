@@ -13,62 +13,62 @@
 #include "Parser/parser.hpp"
 #include "Visitor/ast_printer.hpp"
 
-int run(const std::string source) {
+int run(const std::string& source, Interpreter& interpreter) {
 
-  auto lexer_error_reporter = std::make_shared<Lexer_error_reporter>();
+  Lexer_error_reporter lexer_error_reporter {};
   Lexer lexer {source, lexer_error_reporter};
   auto tokens = lexer.get_tokens();
-  if (lexer_error_reporter->had_error()) return 65;
+  if (lexer_error_reporter.had_error()) return common::EX_DATAERR;
 
-  auto parser_error_reporter = std::make_shared<Parser_error_reporter>();
+  Parser_error_reporter parser_error_reporter {};
   Parser parser {tokens, parser_error_reporter};
   auto statements = parser.parse();
-  if (parser_error_reporter->had_error()) return 65;
+  if (parser_error_reporter.had_error()) return common::EX_DATAERR;
 
-  static Interpreter interpreter {};
-  auto interpreter_error_reporter =
-      std::make_shared<Interpreter_error_reporter>();
-  interpreter.set_error_reporter(interpreter_error_reporter);
   interpreter.interprete(statements);
-  if (interpreter_error_reporter->had_error()) return 70;
+  if (interpreter.get_error_reporter().had_error()) return common::EX_SOFTWARE;
 
   return 0;
 }
 
 void run_prompt() {
+  Interpreter_error_reporter error_reporter {};
+  Interpreter interpreter {error_reporter};
   for (;;) {
     std::string line;
     std::cout << "> ";
     std::getline(std::cin, line);
     if (!std::cin) break;
-    run(line);
+    run(line, interpreter);
   }
   std::cout << "Bye!" << common::newl;
 }
 
-void run_file(const char* filename) {
+int run_file(const char* filename) {
   std::ifstream in_file {filename, std::ios_base::in};
   if (!in_file) {
-    std::cerr << "Failed to read file " <<
+    std::cerr << "Failed to read " <<
         filename << common::newl;
-      std::exit(74);
+    return common::EX_IOERR;
   }
   std::string file_content {
       std::istreambuf_iterator<char> {in_file},
       std::istreambuf_iterator<char> {}
   };
-  int status = run(file_content);
-  if (status != 0) std::exit(status);
+  Interpreter_error_reporter error_reporter {};
+  Interpreter interpreter {error_reporter};
+  return run(file_content, interpreter);
 }
 
 int main(int argc, char* argv[]) {
+  int status = 0;
   if (argc == 1) {
     run_prompt();
   } else if (argc == 2) {
-    run_file(argv[1]);
+    status = run_file(argv[1]);
   } else {
     // TODO: Script arguments
-    run_file(argv[1]);
+    status = run_file(argv[1]);
   }
-  return 0;
+  return status;
 }

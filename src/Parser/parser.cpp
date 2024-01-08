@@ -10,7 +10,7 @@
 #include "parser.hpp"
 
 Parser::Parser(const std::vector<Token>& p_tokens,
-    std::shared_ptr<Parser_error_reporter> p_error_reporter):
+    Parser_error_reporter& p_error_reporter):
   tokens { p_tokens }, error_reporter {p_error_reporter} {}
 
 const Token& Parser::previous() {
@@ -66,7 +66,7 @@ void Parser::synchronize() {
 
 Parse_error Parser::error(const Token& token,
     const std::string message) {
-  error_reporter->error(token, message);
+  error_reporter.error(token, message);
   return Parse_error {"Parse error."};
 }
 
@@ -89,10 +89,11 @@ std::shared_ptr<Expr> Parser::primary() {
     );
   }
 
-  if (match({Token_type::NIL}))
+  if (match({Token_type::NIL})) {
     return std::make_shared<Ast_literal>(
       Literal {Literal_type::NIL}
     );
+  }
   
   if (match({Token_type::NUMBER, Token_type::STRING})) {
     return std::make_shared<Ast_literal>(
