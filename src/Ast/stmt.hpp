@@ -9,10 +9,11 @@
 #include <vector>
 
 #include "expr.hpp"
-#include "../Visitor/mutable_state_visitor.hpp"
+#include "Visitor/mutable_state_visitor.hpp"
 
 struct Stmt {
 	virtual void accept(Mutable_state_visitor&) = 0;
+	virtual ~Stmt() {};
 };
 
 struct Block: public Stmt {

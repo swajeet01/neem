@@ -1,4 +1,4 @@
-%includes   =   memory*, vector*, expr.hpp, ../Visitor/mutable_state_visitor.hpp
+%includes   =   memory*, vector*, expr.hpp, Visitor/mutable_state_visitor.hpp
 Block       =   std::vector<std::shared_ptr<Stmt>> statements
 Expression  =   Expr* expression
 If          =   Expr* condition, Stmt* then_branch, Stmt* else_branch

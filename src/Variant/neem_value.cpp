@@ -79,7 +79,12 @@ void Neem_value::put_bool(bool b00l) {
 
 std::string Neem_value::to_string() {
   if (type == Value_type::NIL) return "nil";
-  if (type == Value_type::NUMBER) return std::to_string(get_number());
+  if (type == Value_type::NUMBER) {
+    std::string string_rep = std::to_string(get_number());
+    string_rep.erase(string_rep.find_last_not_of('0') + 1, std::string::npos);
+    string_rep.erase(string_rep.find_last_not_of('.') + 1, std::string::npos);
+    return string_rep;
+  }
   if (type == Value_type::STRING) return get_string();
   if (type == Value_type::BOOL) return get_bool() ? "true" : "false";
   // Unreachable

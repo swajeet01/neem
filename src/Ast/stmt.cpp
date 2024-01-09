@@ -6,9 +6,9 @@
 #include <vector>
 
 #include "expr.hpp"
-#include "../Visitor/mutable_state_visitor.hpp"
+#include "Visitor/mutable_state_visitor.hpp"
 
-#include "stmt.hpp"
+#include "Ast/stmt.hpp"
 
 Block::Block(std::vector<std::shared_ptr<Stmt>> p_statements):
 	statements {p_statements} {}

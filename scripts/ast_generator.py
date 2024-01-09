@@ -106,6 +106,7 @@ def generate_header_file(includes, klasses, base, writer):
     writer.emmit_blank()
     writer.writeln(f"struct {base} {{")
     writer.writeln(f"{tabs(1)}virtual void accept(Mutable_state_visitor&) = 0;")
+    writer.writeln(f"{tabs(1)}virtual ~{base}() {{}};")
     writer.writeln("};")
     writer.emmit_blank()
     for klass in klasses:
@@ -140,17 +141,18 @@ def generate_impl_file(includes, klasses, base, writer):
         if not include.is_std:
             writer.writeln(f"#include \"{include.file}\"")
     writer.emmit_blank()
-    writer.writeln(f"#include \"{base.lower()}.hpp\"")
+    writer.writeln(f"#include \"Ast/{base.lower()}.hpp\"")
     writer.emmit_blank()
     for klass in klasses:
         generate_class_impl(klass, base, writer)
 
 def main():
-    if len(sys.argv) != 4:
-        print("Usage:", sys.argv[0], "<base>", "<desc_file>", "<output_dir>")
+    if len(sys.argv) != 3:
+        print("Usage:", sys.argv[0], "<base>", "<desc_file>")
         exit(64)
 
-    _, base, desc_file, output_dir = sys.argv
+    _, base, desc_file = sys.argv
+    output_dir = "src/Ast/"
 
     includes, klasses = read_file(desc_file)
 

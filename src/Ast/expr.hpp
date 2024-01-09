@@ -7,12 +7,13 @@
 
 #include <memory>
 
-#include "../Token/token.hpp"
-#include "../Variant/literal.hpp"
-#include "../Visitor/mutable_state_visitor.hpp"
+#include "Token/token.hpp"
+#include "Variant/literal.hpp"
+#include "Visitor/mutable_state_visitor.hpp"
 
 struct Expr {
 	virtual void accept(Mutable_state_visitor&) = 0;
+	virtual ~Expr() {};
 };
 
 struct Assign: public Expr {

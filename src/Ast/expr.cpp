@@ -4,11 +4,11 @@
 
 #include <memory>
 
-#include "../Token/token.hpp"
-#include "../Variant/literal.hpp"
-#include "../Visitor/mutable_state_visitor.hpp"
+#include "Token/token.hpp"
+#include "Variant/literal.hpp"
+#include "Visitor/mutable_state_visitor.hpp"
 
-#include "expr.hpp"
+#include "Ast/expr.hpp"
 
 Assign::Assign(Token p_name, std::shared_ptr<Expr> p_value):
 	name {p_name}, value {p_value} {}
