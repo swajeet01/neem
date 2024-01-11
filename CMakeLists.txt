@@ -2,6 +2,13 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 project(neem LANGUAGES CXX)
 
+option(BUILD_STATIC "Build statically linked standalone executable." OFF)
+
+if(BUILD_STATIC)
+  add_compile_options(-static -static-libgcc -static-libstdc++)
+  add_link_options(-static -static-libgcc -static-libstdc++)
+endif()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(src)
