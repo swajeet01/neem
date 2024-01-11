@@ -166,6 +166,7 @@ target_sources(native_functions
   PRIVATE
   src/Variant/neem_value.hpp
   src/Visitor/interpreter.hpp
+  src/common.hpp
   src/Callable/native_functions.hpp
   src/Callable/native_functions.cpp
 )
