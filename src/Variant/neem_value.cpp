@@ -1,7 +1,9 @@
+#include <memory>
 #include <string>
 #include <stdexcept>
 #include <variant>
 
+#include "Callable/neem_callable.hpp"
 #include "neem_value.hpp"
 
 Neem_value::Neem_value() {
@@ -34,6 +36,14 @@ Neem_value::Neem_value(Value_type ptype, bool pbool) {
   data = pbool;
 }
 
+Neem_value::Neem_value(Value_type ptype, std::shared_ptr<Neem_callable> callable) {
+  if (ptype != Value_type::NEEM_CALLABLE) {
+    throw std::runtime_error {"[Internal] Expected Value_type 'NEEM_CALLABLE'."};
+  }
+  type = ptype;
+  data = callable;
+}
+
 Value_type Neem_value::get_type() {
   return type;
 }
@@ -62,6 +72,14 @@ bool Neem_value::get_bool() {
   return std::get<bool>(data);
 }
 
+std::shared_ptr<Neem_callable> Neem_value::get_callable() {
+  if (type != Value_type::NEEM_CALLABLE) {
+    throw std::runtime_error
+      {"[Internal] Tried to retrive member 'callable' while holding other type of value."};
+  }
+  return std::get<std::shared_ptr<Neem_callable>>(data);
+}
+
 void Neem_value::put_string(std::string str) {
   type = Value_type::STRING;
   data = str;
@@ -77,6 +95,11 @@ void Neem_value::put_bool(bool b00l) {
   data = b00l;
 }
 
+void Neem_value::put_callable(std::shared_ptr<Neem_callable> callable) {
+  type = Value_type::NEEM_CALLABLE;
+  data = callable;
+}
+
 std::string Neem_value::to_string() {
   if (type == Value_type::NIL) return "nil";
   if (type == Value_type::NUMBER) {
@@ -87,6 +110,7 @@ std::string Neem_value::to_string() {
   }
   if (type == Value_type::STRING) return get_string();
   if (type == Value_type::BOOL) return get_bool() ? "true" : "false";
+  if (type == Value_type::NEEM_CALLABLE) return get_callable()->to_string();
   // Unreachable
   return "undefined";
 }

@@ -8,6 +8,7 @@
 
 struct Mutable_state_visitor {
   virtual void visit(Binary&) = 0;
+  virtual void visit(Call&) = 0;
   virtual void visit(Unary&) = 0;
   virtual void visit(Grouping&) = 0;
   virtual void visit(Ast_literal&) = 0;
@@ -20,6 +21,7 @@ struct Mutable_state_visitor {
   virtual void visit(If&) = 0;
   virtual void visit(Logical&) = 0;
   virtual void visit(While&) = 0;
+  virtual ~Mutable_state_visitor() { }
 };
 
 #endif // !MUTABLE_STATE_VISITOR_H

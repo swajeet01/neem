@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 project(neem LANGUAGES CXX)
 
-message(STATUS "CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
-message(STATUS "CMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}")
-message(STATUS "CMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}")
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(src)
@@ -25,6 +21,8 @@ add_library(neem_value OBJECT)
 add_library(ast_printer OBJECT)
 add_library(interpreter OBJECT)
 add_library(environment OBJECT)
+add_library(native_functions OBJECT)
+
 
 add_executable(neem src/neem.cpp)
 
@@ -95,6 +93,8 @@ target_sources(parser
   PRIVATE
   src/Token/token.hpp
   src/Ast/expr.hpp
+  src/Ast/stmt.hpp
+  src/Token/token_type.hpp
   src/Parser/parser.hpp
   src/Parser/parser.cpp
 )
@@ -116,6 +116,7 @@ target_sources(literal
 
 target_sources(neem_value
   PRIVATE
+  src/Callable/neem_callable.hpp
   src/Variant/neem_value.hpp
   src/Variant/neem_value.cpp
 )
@@ -131,8 +132,12 @@ target_sources(interpreter
   PRIVATE
   src/Ast/expr.hpp
   src/Ast/stmt.hpp
+  src/Environment/environment.hpp
   src/Error/neem_runtime_error.hpp
   src/Error/interpreter_error_reporter.hpp
+  src/Variant/neem_value.hpp
+  src/Callable/neem_callable.hpp
+  src/Callable/native_functions.hpp
   src/common.hpp
   src/Visitor/interpreter.hpp
   src/Visitor/interpreter.cpp
@@ -142,8 +147,17 @@ target_sources(environment
   PRIVATE
   src/Error/neem_runtime_error.hpp
   src/Token/token.hpp
+  src/Variant/neem_value.hpp
   src/Environment/environment.hpp
   src/Environment/environment.cpp
+)
+
+target_sources(native_functions
+  PRIVATE
+  src/Variant/neem_value.hpp
+  src/Visitor/interpreter.hpp
+  src/Callable/native_functions.hpp
+  src/Callable/native_functions.cpp
 )
 
 
@@ -161,4 +175,5 @@ target_link_libraries(neem
   interpreter
   stmt
   environment
+  native_functions
 )

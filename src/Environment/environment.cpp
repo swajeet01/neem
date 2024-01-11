@@ -3,12 +3,13 @@
 
 #include "Error/neem_runtime_error.hpp"
 #include "Token/token.hpp"
+#include "Variant/neem_value.hpp"
 #include "environment.hpp"
 
 Environment::Environment(std::shared_ptr<Environment> p_enclosing):
-    enclosing {p_enclosing} {}
+    enclosing {p_enclosing} { }
 
-void Environment::define(std::string& name, Neem_value& value) {
+void Environment::define(const std::string& name, const Neem_value& value) {
   values[name] = value;
 }
 

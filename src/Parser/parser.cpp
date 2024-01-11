@@ -1,4 +1,3 @@
-#include <cmath>
 #include <initializer_list>
 #include <memory>
 #include <string>
@@ -7,6 +6,7 @@
 #include "Token/token.hpp"
 #include "Ast/expr.hpp"
 #include "Ast/stmt.hpp"
+#include "Token/token_type.hpp"
 #include "parser.hpp"
 
 Parser::Parser(const std::vector<Token>& p_tokens,
@@ -114,13 +114,41 @@ std::shared_ptr<Expr> Parser::primary() {
   throw error(peek(), "Expect expression.");
 }
 
+std::shared_ptr<Expr> Parser::finish_call(std::shared_ptr<Expr> callee) {
+  std::vector<std::shared_ptr<Expr>> arguments;
+  if (!check(Token_type::RIGHT_PAREN)) {
+    do {
+      if (arguments.size() >= 255) {
+        error(peek(),
+              "Can't have more than 255 arguments."); // Just because bob added.
+      }
+      arguments.push_back(expression());
+    } while (match({Token_type::COMMA}));
+  }
+  Token paren = consume(Token_type::RIGHT_PAREN,
+                        "Expected ')' after arguments.");
+  return std::make_shared<Call>(callee, paren, arguments);
+}
+
+std::shared_ptr<Expr> Parser::call() {
+  std::shared_ptr<Expr> expr = primary();
+  while (true) {
+    if (match({Token_type::LEFT_PAREN})) {
+      expr = finish_call(expr);
+    } else {
+      break; // for object properties.
+    }
+  }
+  return expr;
+}
+
 std::shared_ptr<Expr> Parser::unary() {
   while (match({Token_type::BANG, Token_type::MINUS})) {
     auto op = previous();
     auto right = unary();
     return std::make_shared<Unary>(op, right);
   }
-  return primary();
+  return call();
 }
 
 std::shared_ptr<Expr> Parser::factor() {

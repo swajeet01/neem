@@ -6,6 +6,7 @@
 #define EXPR_HPP
 
 #include <memory>
+#include <vector>
 
 #include "Token/token.hpp"
 #include "Variant/literal.hpp"
@@ -28,6 +29,14 @@ struct Binary: public Expr {
 	Token op;
 	std::shared_ptr<Expr> right;
 	Binary(std::shared_ptr<Expr>, Token, std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&);
+};
+
+struct Call: public Expr {
+	std::shared_ptr<Expr> callee;
+	Token paren;
+	std::vector<std::shared_ptr<Expr>> arguments;
+	Call(std::shared_ptr<Expr>, Token, std::vector<std::shared_ptr<Expr>>);
 	void accept(Mutable_state_visitor&);
 };
 

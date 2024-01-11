@@ -3,6 +3,7 @@
 *******************************/
 
 #include <memory>
+#include <vector>
 
 #include "Token/token.hpp"
 #include "Variant/literal.hpp"
@@ -21,6 +22,13 @@ Binary::Binary(std::shared_ptr<Expr> p_left, Token p_op, std::shared_ptr<Expr> p
 	left {p_left}, op {p_op}, right {p_right} {}
 
 void Binary::accept(Mutable_state_visitor& visitor) {
+	visitor.visit(*this);
+}
+
+Call::Call(std::shared_ptr<Expr> p_callee, Token p_paren, std::vector<std::shared_ptr<Expr>> p_arguments):
+	callee {p_callee}, paren {p_paren}, arguments {p_arguments} {}
+
+void Call::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(*this);
 }
 

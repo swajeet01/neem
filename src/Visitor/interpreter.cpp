@@ -1,18 +1,33 @@
 #include <cmath>
 #include <memory>
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <vector>
 
 #include "Ast/expr.hpp"
 #include "Ast/stmt.hpp"
+#include "Environment/environment.hpp"
 #include "Error/neem_runtime_error.hpp"
 #include "Error/interpreter_error_reporter.hpp"
+#include "Variant/neem_value.hpp"
+#include "Callable/neem_callable.hpp"
+#include "Callable/native_functions.hpp"
 #include "common.hpp"
 #include "interpreter.hpp"
 
 Interpreter::Interpreter(Interpreter_error_reporter& perror_reporter):
     error_reporter {perror_reporter},
-    environment {std::make_shared<Environment>()} {}
+    globals {std::make_shared<Environment>()},
+    environment {globals} {
+
+  globals->define(
+    "clock",
+    Neem_value {Value_type::NEEM_CALLABLE,
+    std::make_shared<Clock>()}
+  );
+
+}
 
 Interpreter_error_reporter& Interpreter::get_error_reporter() {
   return error_reporter;
@@ -131,8 +146,32 @@ void Interpreter::visit(Binary& expr) {
   }
 }
 
+void Interpreter::visit(Call& expr) {
+  Neem_value callee = evaluate(expr.callee);
+
+  std::vector<Neem_value> arguments;
+  for (auto argument: expr.arguments) {
+    arguments.push_back(evaluate(argument));
+  }
+
+  if (callee.get_type() != Value_type::NEEM_CALLABLE) {
+    throw Neem_runtime_error {expr.paren, "Non function type value called."};
+  }
+  std::shared_ptr<Neem_callable> function = callee.get_callable();
+  if (arguments.size() != function->arity()) {
+    std::ostringstream composer;
+    composer << "Expected " << function->arity() << " arguments, "
+      "got " << arguments.size() << ".";
+    throw Neem_runtime_error(expr.paren, composer.str());
+  }
+  data = function->call(*this, arguments);
+}
+
 Neem_value Interpreter::evaluate(std::shared_ptr<Expr> expr) {
   expr->accept(*this);
+  // Neem_value evaluated = data;
+  // data.clear();
+  // return evaluated;
   return data;
 }
 

@@ -13,11 +13,13 @@
 
 class Interpreter: public Mutable_state_visitor {
   Interpreter_error_reporter& error_reporter;
+  std::shared_ptr<Environment> globals;
   std::shared_ptr<Environment>  environment;
   Neem_value data;
   bool is_truthy(Neem_value&);
   bool is_equal(Neem_value& left, Neem_value& right);
   void visit(Binary&);
+  void visit(Call&);
   void visit(Unary&);
   void visit(Grouping&);
   void visit(Ast_literal&);

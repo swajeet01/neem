@@ -14,7 +14,7 @@ class Environment {
 public:
   Environment() = default;
   Environment(std::shared_ptr<Environment>);
-  void define(std::string&, Neem_value&);
+  void define(const std::string&, const Neem_value&);
   Neem_value get(Token&);
   void assign(Token& token, Neem_value&);
 };
