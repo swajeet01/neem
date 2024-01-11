@@ -1,5 +1,6 @@
 #include <initializer_list>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -7,6 +8,7 @@
 #include "Ast/expr.hpp"
 #include "Ast/stmt.hpp"
 #include "Token/token_type.hpp"
+#include "Variant/neem_value.hpp"
 #include "parser.hpp"
 
 Parser::Parser(const std::vector<Token>& p_tokens,
@@ -251,6 +253,9 @@ std::shared_ptr<Stmt> Parser::statement() {
   if (match({Token_type::PRINT})) {
     return print_statement();
   }
+  if (match({Token_type::RETURN})) {
+    return return_statement();
+  }
   if (match({Token_type::WHILE})) {
     return while_statement();
   }
@@ -258,6 +263,16 @@ std::shared_ptr<Stmt> Parser::statement() {
     return std::make_shared<Block>(block_statement());
   }
   return expr_statement();
+}
+
+std::shared_ptr<Stmt> Parser::return_statement() {
+  Token keyword = previous();
+  std::shared_ptr<Expr> value;
+  if (!check(Token_type::SEMI_COL)) {
+    value = expression();
+  }
+  consume(Token_type::SEMI_COL, "Expected ; after return value.");
+  return std::make_shared<Return>(keyword, value);
 }
 
 std::shared_ptr<Stmt> Parser::if_statement() {
@@ -349,12 +364,42 @@ std::vector<std::shared_ptr<Stmt>> Parser::block_statement() {
 
 std::shared_ptr<Stmt> Parser::declaration() {
   try {
+    if (match({Token_type::FN})) return function("function");
     if (match({Token_type::LET})) return var_declaration();
     return statement();
   } catch (Parse_error& err) {
     synchronize();
     return nullptr;
   }
+}
+
+std::shared_ptr<Function> Parser::function(std::string kind) {
+  std::ostringstream iden_composer;
+  iden_composer << "Expected " << kind << " name.";
+  Token name = consume(Token_type::IDENTIFIER, iden_composer.str());
+
+  std::ostringstream paren_composer;
+  paren_composer << "Expected '(' after " << kind << " name.";
+  consume(Token_type::LEFT_PAREN, paren_composer.str());
+
+  std::vector<Token> parameters;
+  if (!check(Token_type::RIGHT_PAREN)) {
+    do {
+      if (parameters.size() >= 255) {
+        error(peek(), "Can't have more than 255 parameters.");
+      }
+      parameters.push_back(consume(Token_type::IDENTIFIER,
+                                   "Expected parameter name."));
+    } while (match({Token_type::COMMA}));
+  }
+  consume(Token_type::RIGHT_PAREN, "Expected ')' after parameters.");
+
+  std::ostringstream brace_composer;
+  brace_composer << "Expected '{' before " << kind << " body.";
+  consume(Token_type::LEFT_BRACE, brace_composer.str());
+
+  std::vector<std::shared_ptr<Stmt>> body = block_statement();
+  return std::make_shared<Function>(name, parameters, body);
 }
 
 std::shared_ptr<Stmt> Parser::var_declaration() {

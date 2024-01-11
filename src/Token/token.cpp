@@ -2,9 +2,9 @@
 #include <string>
 
 #include "common.hpp"
-#include "token.hpp"
 #include "token_type.hpp"
 #include "Variant/literal.hpp"
+#include "token.hpp"
 
 Token::Token(const std::string plexeme, int pline, Token_type ptype,
     Literal pliteral):

@@ -10,6 +10,7 @@
 
 #include "expr.hpp"
 #include "Visitor/mutable_state_visitor.hpp"
+#include "Token/token.hpp"
 
 struct Stmt {
 	virtual void accept(Mutable_state_visitor&) = 0;
@@ -25,6 +26,21 @@ struct Block: public Stmt {
 struct Expression: public Stmt {
 	std::shared_ptr<Expr> expression;
 	Expression(std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&);
+};
+
+struct Function: public Stmt {
+	Token name;
+	std::vector<Token> params;
+	std::vector<std::shared_ptr<Stmt>> body;
+	Function(Token, std::vector<Token>, std::vector<std::shared_ptr<Stmt>>);
+	void accept(Mutable_state_visitor&);
+};
+
+struct Return: public Stmt {
+	Token keyword;
+	std::shared_ptr<Expr> value;
+	Return(Token, std::shared_ptr<Expr>);
 	void accept(Mutable_state_visitor&);
 };
 

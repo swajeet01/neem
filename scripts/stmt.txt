@@ -1,6 +1,8 @@
-%includes   =   memory*, vector*, expr.hpp, Visitor/mutable_state_visitor.hpp
+%includes   =   memory*, vector*, expr.hpp, Visitor/mutable_state_visitor.hpp, Token/token.hpp
 Block       =   std::vector<std::shared_ptr<Stmt>> statements
 Expression  =   Expr* expression
+Function    =   Token name, std::vector<Token> params, std::vector<std::shared_ptr<Stmt>> body
+Return      =   Token keyword, Expr* value
 If          =   Expr* condition, Stmt* then_branch, Stmt* else_branch
 Print       =   Expr* expression
 Var         =   Token name, Expr* initializer

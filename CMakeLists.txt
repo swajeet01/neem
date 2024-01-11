@@ -29,7 +29,7 @@ add_library(ast_printer OBJECT)
 add_library(interpreter OBJECT)
 add_library(environment OBJECT)
 add_library(native_functions OBJECT)
-
+add_library(neem_function OBJECT)
 
 add_executable(neem src/neem.cpp)
 
@@ -46,6 +46,7 @@ target_sources(stmt
   PRIVATE
   src/Ast/expr.hpp
   src/Visitor/mutable_state_visitor.hpp
+  src/Token/token.hpp
   src/Ast/stmt.hpp
   src/Ast/stmt.cpp
 )
@@ -102,6 +103,7 @@ target_sources(parser
   src/Ast/expr.hpp
   src/Ast/stmt.hpp
   src/Token/token_type.hpp
+  src/Variant/neem_value.hpp
   src/Parser/parser.hpp
   src/Parser/parser.cpp
 )
@@ -109,9 +111,9 @@ target_sources(parser
 target_sources(token
   PRIVATE
   src/common.hpp
-  src/Token/token.hpp
   src/Token/token_type.hpp
   src/Variant/literal.hpp
+  src/Token/token.hpp
   src/Token/token.cpp
 )
 
@@ -139,6 +141,7 @@ target_sources(interpreter
   PRIVATE
   src/Ast/expr.hpp
   src/Ast/stmt.hpp
+  src/Callable/neem_function.hpp
   src/Environment/environment.hpp
   src/Error/neem_runtime_error.hpp
   src/Error/interpreter_error_reporter.hpp
@@ -167,6 +170,16 @@ target_sources(native_functions
   src/Callable/native_functions.cpp
 )
 
+target_sources(neem_function
+  PRIVATE
+  src/Ast/stmt.hpp
+  src/Environment/environment.hpp
+  src/Variant/neem_value.hpp
+  src/Visitor/interpreter.hpp
+  src/Callable/neem_function.hpp
+  src/Callable/neem_function.cpp
+)
+
 
 target_link_libraries(neem
   PRIVATE
@@ -183,4 +196,5 @@ target_link_libraries(neem
   stmt
   environment
   native_functions
+  neem_function
 )

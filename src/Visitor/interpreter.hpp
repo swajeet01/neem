@@ -13,8 +13,6 @@
 
 class Interpreter: public Mutable_state_visitor {
   Interpreter_error_reporter& error_reporter;
-  std::shared_ptr<Environment> globals;
-  std::shared_ptr<Environment>  environment;
   Neem_value data;
   bool is_truthy(Neem_value&);
   bool is_equal(Neem_value& left, Neem_value& right);
@@ -32,14 +30,30 @@ class Interpreter: public Mutable_state_visitor {
   void visit(If&);
   void visit(Logical&);
   void visit(While&);
+  void visit(Function&);
+  void visit(Return&);
   Neem_value evaluate(std::shared_ptr<Expr>);
-  void execute_block(std::vector<std::shared_ptr<Stmt>>&,
-      std::shared_ptr<Environment>);
   void execute(std::shared_ptr<Stmt>);
 public:
   Interpreter(Interpreter_error_reporter&);
+  std::shared_ptr<Environment> globals;
+  std::shared_ptr<Environment> environment;
+  void execute_block(std::vector<std::shared_ptr<Stmt>>&,
+      std::shared_ptr<Environment>);
   void interprete(std::vector<std::shared_ptr<Stmt>>);
   Interpreter_error_reporter& get_error_reporter();
+};
+
+struct Interpreter_env_controller {
+  Interpreter& interpreter;
+  std::shared_ptr<Environment> old_environment;
+  std::shared_ptr<Environment> new_environment;
+  Interpreter_env_controller(Interpreter&, std::shared_ptr<Environment>);
+  ~Interpreter_env_controller();
+};
+
+struct Return_hack {
+  Neem_value value;
 };
 
 #endif // !INTERPRETER_H

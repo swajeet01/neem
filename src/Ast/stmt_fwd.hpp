@@ -7,6 +7,8 @@
 
 struct Block;
 struct Expression;
+struct Function;
+struct Return;
 struct If;
 struct Print;
 struct Var;

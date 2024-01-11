@@ -7,6 +7,7 @@
 
 #include "Ast/expr.hpp"
 #include "Ast/stmt.hpp"
+#include "Callable/neem_function.hpp"
 #include "Environment/environment.hpp"
 #include "Error/neem_runtime_error.hpp"
 #include "Error/interpreter_error_reporter.hpp"
@@ -25,6 +26,12 @@ Interpreter::Interpreter(Interpreter_error_reporter& perror_reporter):
     "clock",
     Neem_value {Value_type::NEEM_CALLABLE,
     std::make_shared<Clock>()}
+  );
+
+  globals->define(
+    "str",
+    Neem_value {Value_type::NEEM_CALLABLE,
+    std::make_shared<Str>()}
   );
 
 }
@@ -277,18 +284,34 @@ void Interpreter::visit(While& stmt) {
   data = Neem_value();
 }
 
+void Interpreter::visit(Function& stmt) {
+  std::shared_ptr<Neem_function> function =
+    std::make_shared<Neem_function>(
+      std::make_shared<Function>(stmt.name, stmt.params, stmt.body)
+    ); // Making a copy of Function, redesign this behaviour later.
+  environment->define(stmt.name.lexeme,
+                      Neem_value {Value_type::NEEM_CALLABLE, function});
+  data = Neem_value {};
+}
+
+void Interpreter::visit(Return& stmt) {
+  Neem_value value {};
+  if (stmt.value) {
+    value = evaluate(stmt.value);
+  }
+  throw Return_hack {value};
+}
+
 void Interpreter::execute_block(std::vector<std::shared_ptr<Stmt>>& statements,
     std::shared_ptr<Environment> p_environment) {
-  auto previous = environment;
   try {
-    environment = p_environment;
+    Interpreter_env_controller executor {*this, p_environment};
     for (auto statement: statements) {
       execute(statement);
     }
-    environment = previous;
-  } catch(Neem_runtime_error& err) {
-    environment = previous;
-    throw err;
+  } catch (Neem_runtime_error& err) {
+    // Did I forget something?
+    throw;
   }
 }
 
@@ -305,3 +328,15 @@ void Interpreter::interprete(std::vector<std::shared_ptr<Stmt>> statements) {
     error_reporter.error(err);
   }
 }
+
+Interpreter_env_controller::Interpreter_env_controller(Interpreter& p_interpreter,
+                               std::shared_ptr<Environment> p_environment):
+    interpreter {p_interpreter},
+    old_environment {interpreter.environment} {
+  interpreter.environment = p_environment;
+}
+
+Interpreter_env_controller::~Interpreter_env_controller() {
+  interpreter.environment = old_environment;
+}
+

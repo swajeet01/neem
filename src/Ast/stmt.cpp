@@ -7,6 +7,8 @@
 
 #include "expr.hpp"
 #include "Visitor/mutable_state_visitor.hpp"
+#include "Token/token.hpp"
+
 #include "Ast/stmt.hpp"
 
 Block::Block(std::vector<std::shared_ptr<Stmt>> p_statements):
@@ -20,6 +22,20 @@ Expression::Expression(std::shared_ptr<Expr> p_expression):
 	expression {p_expression} {}
 
 void Expression::accept(Mutable_state_visitor& visitor) {
+	visitor.visit(*this);
+}
+
+Function::Function(Token p_name, std::vector<Token> p_params, std::vector<std::shared_ptr<Stmt>> p_body):
+	name {p_name}, params {p_params}, body {p_body} {}
+
+void Function::accept(Mutable_state_visitor& visitor) {
+	visitor.visit(*this);
+}
+
+Return::Return(Token p_keyword, std::shared_ptr<Expr> p_value):
+	keyword {p_keyword}, value {p_value} {}
+
+void Return::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(*this);
 }
 

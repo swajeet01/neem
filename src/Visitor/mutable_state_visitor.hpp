@@ -21,6 +21,8 @@ struct Mutable_state_visitor {
   virtual void visit(If&) = 0;
   virtual void visit(Logical&) = 0;
   virtual void visit(While&) = 0;
+  virtual void visit(Function&) = 0;
+  virtual void visit(Return&) = 0;
   virtual ~Mutable_state_visitor() { }
 };
 
