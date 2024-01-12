@@ -50,6 +50,7 @@ int run(const std::string& source, Interpreter& interpreter) {
 }
 
 void run_prompt() {
+  std::cout << common::notice << common::newl;
   Interpreter_error_reporter error_reporter {};
   Interpreter interpreter {error_reporter};
   for (;;) {
@@ -80,7 +81,6 @@ int run_file(const char* filename) {
 
 
 int main(int argc, char* argv[]) {
-  std::cout << common::notice << common::newl;
   int status = 0;
   if (argc == 1) {
     run_prompt();

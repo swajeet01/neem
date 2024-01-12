@@ -34,6 +34,11 @@ Interpreter::Interpreter(Interpreter_error_reporter& perror_reporter):
     std::make_shared<Str>()}
   );
 
+  globals->define(
+    "read",
+    Neem_value {Value_type::NEEM_CALLABLE,
+    std::make_shared<Read>()}
+  );
 }
 
 Interpreter_error_reporter& Interpreter::get_error_reporter() {
@@ -287,7 +292,8 @@ void Interpreter::visit(While& stmt) {
 void Interpreter::visit(Function& stmt) {
   std::shared_ptr<Neem_function> function =
     std::make_shared<Neem_function>(
-      std::make_shared<Function>(stmt.name, stmt.params, stmt.body)
+      std::make_shared<Function>(stmt.name, stmt.params, stmt.body),
+      environment
     ); // Making a copy of Function, redesign this behaviour later.
   environment->define(stmt.name.lexeme,
                       Neem_value {Value_type::NEEM_CALLABLE, function});

@@ -4,8 +4,6 @@
 #include "Ast/expr_fwd.hpp"
 #include "Ast/stmt_fwd.hpp"
 
-#include <memory>
-
 struct Mutable_state_visitor {
   virtual void visit(Binary&) = 0;
   virtual void visit(Call&) = 0;

@@ -1,4 +1,5 @@
 #include <chrono>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -31,5 +32,18 @@ Neem_value Str::call(Interpreter&,
 }
 
 std::string Str::to_string() {
+  return "<native fn>";
+}
+
+int Read::arity() { return 0; }
+
+Neem_value Read::call(Interpreter&, std::vector<Neem_value> arguments) {
+  std::string line;
+  std::getline(std::cin, line);
+  return Neem_value {Value_type::STRING, line};
+}
+
+
+std::string Read::to_string() {
   return "<native fn>";
 }
