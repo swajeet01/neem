@@ -1,15 +1,16 @@
 #ifndef NEEM_FUNCTION_H
 #define NEEM_FUNCTION_H
 
-#include "Ast/stmt.hpp"
-#include "Callable/neem_callable.hpp"
-#include "Environment/environment.hpp"
 #include <memory>
 #include <string>
 
+#include "Ast/stmt.hpp"
+#include "Callable/neem_callable.hpp"
+#include "Environment/environment.hpp"
+
 class Neem_function: public Neem_callable {
   std::shared_ptr<Function> declaration;
-  std::shared_ptr<Environment> closure;
+  std::weak_ptr<Environment> closure;
   std::string repr {"<fn ?>"};
 public:
   Neem_function(std::shared_ptr<Function>, std::shared_ptr<Environment>);

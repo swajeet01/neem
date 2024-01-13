@@ -5,6 +5,7 @@
 
 #include "Ast/stmt.hpp"
 #include "Environment/environment.hpp"
+#include "Error/neem_runtime_error.hpp"
 #include "Variant/neem_value.hpp"
 #include "Visitor/interpreter.hpp"
 #include "Callable/neem_function.hpp"
@@ -24,8 +25,11 @@ int Neem_function::arity() {
 
 Neem_value Neem_function::call(Interpreter& interpreter,
                     std::vector<Neem_value> arguments) {
-  std::shared_ptr<Environment> environment =
-    std::make_shared<Environment>(closure);
+  std::shared_ptr<Environment> environment = closure.lock();
+  if (!environment) {
+    throw Neem_runtime_error {declaration->name,
+      "[Internal] Unable to complete call!"};
+  }
   for (int i = 0; i < declaration->params.size(); i++) {
     environment->define(declaration->params[i].lexeme, arguments[i]);
   }

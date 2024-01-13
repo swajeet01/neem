@@ -9,14 +9,19 @@
 #include "Variant/neem_value.hpp"
 
 class Environment {
-  std::shared_ptr<Environment> enclosing;
-  std::unordered_map<std::string, Neem_value> values;
 public:
   Environment() = default;
-  Environment(std::shared_ptr<Environment>);
+  explicit Environment(std::shared_ptr<Environment>);
   void define(const std::string&, const Neem_value&);
   Neem_value get(Token&);
+  Neem_value get_at(int, const std::string&);
   void assign(Token& token, Neem_value&);
+  void assign_at(int, Token&, Neem_value&);
+  using Value_map = std::unordered_map<std::string, Neem_value>;
+private:
+  std::shared_ptr<Environment> enclosing {nullptr};
+  Value_map values {};
+  Environment* ancestor(int);
 };
 
 #endif // !ENVIRONMENT_H

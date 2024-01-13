@@ -15,6 +15,9 @@ include_directories(src)
 
 add_library(expr OBJECT)
 add_library(stmt OBJECT)
+add_library(native_functions OBJECT)
+add_library(neem_function OBJECT)
+add_library(environment OBJECT)
 add_library(interpreter_error_reporter OBJECT)
 add_library(lexer_error_reporter OBJECT)
 add_library(neem_runtime_error OBJECT)
@@ -25,11 +28,8 @@ add_library(parser OBJECT)
 add_library(token OBJECT)
 add_library(literal OBJECT)
 add_library(neem_value OBJECT)
-add_library(ast_printer OBJECT)
 add_library(interpreter OBJECT)
-add_library(environment OBJECT)
-add_library(native_functions OBJECT)
-add_library(neem_function OBJECT)
+add_library(resolver OBJECT)
 
 add_executable(neem src/neem.cpp)
 
@@ -49,6 +49,35 @@ target_sources(stmt
   src/Token/token.hpp
   src/Ast/stmt.hpp
   src/Ast/stmt.cpp
+)
+
+target_sources(native_functions
+  PRIVATE
+  src/Variant/neem_value.hpp
+  src/Visitor/interpreter.hpp
+  src/common.hpp
+  src/Callable/native_functions.hpp
+  src/Callable/native_functions.cpp
+)
+
+target_sources(neem_function
+  PRIVATE
+  src/Ast/stmt.hpp
+  src/Environment/environment.hpp
+  src/Error/neem_runtime_error.hpp
+  src/Variant/neem_value.hpp
+  src/Visitor/interpreter.hpp
+  src/Callable/neem_function.hpp
+  src/Callable/neem_function.cpp
+)
+
+target_sources(environment
+  PRIVATE
+  src/Error/neem_runtime_error.hpp
+  src/Token/token.hpp
+  src/Variant/neem_value.hpp
+  src/Environment/environment.hpp
+  src/Environment/environment.cpp
 )
 
 target_sources(interpreter_error_reporter
@@ -89,11 +118,11 @@ target_sources(parser_error_reporter
 target_sources(lexer
   PRIVATE
   src/common.hpp
-  src/Lexer/lexer.hpp
   src/Token/token.hpp
   src/Token/token_type.hpp
   src/Error/error_reporter.hpp
   src/Variant/literal.hpp
+  src/Lexer/lexer.hpp
   src/Lexer/lexer.cpp
 )
 
@@ -130,13 +159,6 @@ target_sources(neem_value
   src/Variant/neem_value.cpp
 )
 
-target_sources(ast_printer
-  PRIVATE
-  src/Ast/expr.hpp
-  src/Visitor/ast_printer.hpp
-  src/Visitor/ast_printer.cpp
-)
-
 target_sources(interpreter
   PRIVATE
   src/Ast/expr.hpp
@@ -153,49 +175,34 @@ target_sources(interpreter
   src/Visitor/interpreter.cpp
 )
 
-target_sources(environment
+target_sources(resolver
   PRIVATE
+  src/Ast/expr.hpp
+  src/Ast/stmt.hpp
   src/Error/neem_runtime_error.hpp
   src/Token/token.hpp
-  src/Variant/neem_value.hpp
-  src/Environment/environment.hpp
-  src/Environment/environment.cpp
-)
-
-target_sources(native_functions
-  PRIVATE
-  src/Variant/neem_value.hpp
   src/Visitor/interpreter.hpp
-  src/common.hpp
-  src/Callable/native_functions.hpp
-  src/Callable/native_functions.cpp
+  src/Visitor/resolver.hpp
+  src/Visitor/resolver.cpp
 )
-
-target_sources(neem_function
-  PRIVATE
-  src/Ast/stmt.hpp
-  src/Environment/environment.hpp
-  src/Variant/neem_value.hpp
-  src/Visitor/interpreter.hpp
-  src/Callable/neem_function.hpp
-  src/Callable/neem_function.cpp
-)
-
 
 target_link_libraries(neem
   PRIVATE
   expr
+  stmt
+  native_functions
+  neem_function
+  environment
   interpreter_error_reporter
   lexer_error_reporter
   neem_runtime_error
   parse_error
   parser_error_reporter
-  lexer parser token
+  lexer
+  parser
+  token
   literal
   neem_value
   interpreter
-  stmt
-  environment
-  native_functions
-  neem_function
+  resolver
 )

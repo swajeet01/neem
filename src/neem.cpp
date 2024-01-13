@@ -20,28 +20,35 @@
 #include <memory>
 #include <string>
 #include <fstream>
+#include <vector>
 
 #include "Error/error_reporter.hpp"
 #include "Error/interpreter_error_reporter.hpp"
 #include "Error/lexer_error_reporter.hpp"
 #include "Error/parser_error_reporter.hpp"
 #include "Visitor/interpreter.hpp"
+#include "Visitor/resolver.hpp"
 #include "common.hpp"
 #include "Lexer/lexer.hpp"
 #include "Parser/parser.hpp"
-#include "Visitor/ast_printer.hpp"
+#include "Ast/stmt.hpp"
+#include "Token/token.hpp"
 
 int run(const std::string& source, Interpreter& interpreter) {
 
   Lexer_error_reporter lexer_error_reporter {};
   Lexer lexer {source, lexer_error_reporter};
-  auto tokens = lexer.get_tokens();
+  std::vector<Token> tokens = lexer.get_tokens();
   if (lexer_error_reporter.had_error()) return common::EX_DATAERR;
 
   Parser_error_reporter parser_error_reporter {};
   Parser parser {tokens, parser_error_reporter};
-  auto statements = parser.parse();
+  std::vector<std::shared_ptr<Stmt>> statements = parser.parse();
   if (parser_error_reporter.had_error()) return common::EX_DATAERR;
+
+  Resolver resolver {interpreter};
+  resolver.resolve(statements);
+  if (interpreter.get_error_reporter().had_error()) return common::EX_SOFTWARE;
 
   interpreter.interprete(statements);
   if (interpreter.get_error_reporter().had_error()) return common::EX_SOFTWARE;

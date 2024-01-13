@@ -1,3 +1,4 @@
+#include <iostream>
 #include <memory>
 #include <string>
 
@@ -14,8 +15,9 @@ void Environment::define(const std::string& name, const Neem_value& value) {
 }
 
 Neem_value Environment::get(Token& name) {
-  if (values.find(name.lexeme) != values.end()) {
-    return values[name.lexeme];
+  Value_map::iterator itr = values.find(name.lexeme);
+  if (itr != values.end()) {
+    return itr->second;
   }
   if (enclosing) {
     return enclosing->get(name);
@@ -23,9 +25,27 @@ Neem_value Environment::get(Token& name) {
   throw Neem_runtime_error {name, "Undefined variable '" + name.lexeme + "'."};
 }
 
+Neem_value Environment::get_at(int distance, const std::string& name) {
+  Value_map& values = ancestor(distance)->values;
+  Value_map::iterator itr = values.find(name);
+  if (itr != values.end()) {
+    return itr->second;
+  }
+  return Neem_value {};
+}
+
+Environment* Environment::ancestor(int distance) {
+  Environment* environment {this};
+  for (int i = 0; i < distance; i++) {
+    environment = environment->enclosing.get();
+  }
+  return environment;
+}
+
 void Environment::assign(Token& name, Neem_value& value) {
-  if (values.find(name.lexeme) != values.end()) {
-    values[name.lexeme] = value;
+  Value_map::iterator itr = values.find(name.lexeme);
+  if (itr != values.end()) {
+    itr->second = value;
     return;
   }
   if (enclosing) {
@@ -33,4 +53,10 @@ void Environment::assign(Token& name, Neem_value& value) {
     return;
   }
   throw Neem_runtime_error {name, "Undefined variable '" + name.lexeme + "'."};
+}
+
+
+void Environment::assign_at(int distance, Token& name, Neem_value& value) {
+  Value_map& values = ancestor(distance)->values;
+  values[name.lexeme] = value;
 }
