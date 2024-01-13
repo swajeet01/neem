@@ -124,7 +124,7 @@ def generate_class_impl(klass, base, writer):
     writer.writeln(f"{tabs(1)}{initializer} {{}}")
     writer.emmit_blank()
     writer.writeln(f"void {klass.name}::accept(Mutable_state_visitor& visitor) {{")
-    writer.writeln(f"{tabs(1)}visitor.visit(*this);")
+    writer.writeln(f"{tabs(1)}visitor.visit(this);")
     writer.writeln("}")
     writer.emmit_blank()
 

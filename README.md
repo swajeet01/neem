@@ -1,15 +1,5 @@
 <img src="https://github.com/swajeet01/neem/assets/47481301/174eb7c4-a741-42dd-a3a5-70706abbebc1" alt="Neem logo" width="200" >
 
-Hello everyone. This is Swajeet Swarnkar, author of this repo. I wanted to
-provide you with an update regarding Neem. Unfortunately, I am very busy
-pursuing my postgraduate program, which demands my full attention and
-dedication.
-
-As a result I will not be able to finish this project in near future.
-However, I want to assure you my deep interest in _Theory of Computation_ and 
-_Compiler Design_ remains, unwavering. I have ambitions to finish this project
-and do many similar projects in future. Till then :wave:.
-
 [![Build](https://github.com/swajeet01/neem/actions/workflows/cmake.yml/badge.svg)](https://github.com/swajeet01/neem/actions/workflows/cmake.yml)
 
 # Neem Programming Language
@@ -28,12 +18,6 @@ refactored and optimized later.
 :warning: Neem is not complete yet and is currently under continuous
 development.
 
-## Quick tasks
-
-- [ ] Redesign + Refactor to avoid excessive use of `shared_ptr`.
-- [ ] Implement a simple block executor for executing blocks without relying
-      on finally-like functionality.
-
 ## Progress
 
 - [x] Scanning
@@ -42,8 +26,8 @@ development.
 - [x] Evaluating expressions
 - [x] Statements and state
 - [x] Control flow
-- [ ] Functions
-- [ ] Resolving and binding
+- [x] Functions
+- [x] Resolving and binding
 - [ ] Structs
 - [ ] Arrays/Lists
 - [ ] Continue/Break support
@@ -93,8 +77,8 @@ Following commands generate AST classes in `src/Ast`.
 
 ```
 $ mkdir src/Ast/
-$ ./scripts/ast_generator.py Expr scripts/expr.txt src/Ast/
-$ ./scripts/ast_generator.py Stmt scripts/stmt.txt src/Ast/
+$ ./scripts/ast_generator.py Expr scripts/expr.txt
+$ ./scripts/ast_generator.py Stmt scripts/stmt.txt
 ```
 
 ### Build and run
@@ -111,21 +95,16 @@ $ cmake --build . -t neem
 Run and try the `neem` executable, `CTRL+D` to exit.
 
 ```
-$ ./neem
-> let name = "User";
-> print "Hello " + name + "!";
+$ ./neem 
+...
+>> let name = read();
+User
+>> print "Hello " + name + "!";
 Hello User!
-> let a = 10.0;
-> let b = 20.5;
-> print a * b;
-205.000000
-> print a * b / 5 + 8; 
-49.000000
+>> 
 ```
 
-In current state, Neem only supports assignment and print statements,
-mathematical and logical expressions, scopes, while and for loops.
-More language features will be implemented soon.
+More examples can be found in `examples/` directory.
 
 ## Work in Progress!
 
