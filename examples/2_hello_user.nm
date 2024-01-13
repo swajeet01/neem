@@ -1,0 +1,9 @@
+fn greetUser(greetings, name) {
+  print greetings + " " + name + "!";
+}
+
+print "What is your name?";
+
+let name = read();
+
+greetUser("Hello", name);
