@@ -13,7 +13,7 @@
 Neem_function::Neem_function(std::shared_ptr<Function> p_declaration,
                              std::shared_ptr<Environment> p_closure):
     declaration {p_declaration},
-    closure {p_closure} {
+    closure_candidate {p_closure} {
   std::ostringstream name_composer;
   name_composer << "<fn " << declaration->name.lexeme << ">";
   repr = name_composer.str();
@@ -25,11 +25,10 @@ int Neem_function::arity() {
 
 Neem_value Neem_function::call(Interpreter& interpreter,
                     std::vector<Neem_value> arguments) {
-  std::shared_ptr<Environment> environment = closure.lock();
-  if (!environment) {
-    throw Neem_runtime_error {declaration->name,
-      "[Internal] Unable to complete call!"};
-  }
+  Environment* closure = closure_candidate ?
+      closure_candidate.get() : &interpreter.globals;
+  std::shared_ptr<Environment> environment = 
+      std::make_shared<Environment>(closure);
   for (int i = 0; i < declaration->params.size(); i++) {
     environment->define(declaration->params[i].lexeme, arguments[i]);
   }
@@ -44,5 +43,3 @@ Neem_value Neem_function::call(Interpreter& interpreter,
 std::string Neem_function::to_string() {
   return repr;
 }
-
-

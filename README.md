@@ -48,26 +48,26 @@ $ cd neem/
 
 ### Generating AST classes
 
-__AST classes are now included in source file, no need to generate__
+__AST classes are now included in source, no need to generate.__
 
 AST classes can be generated with the `ast_generator.py` script.
 `ast_generator.py` reads description of AST classes from a file,
 the file should specify AST classes in this format-
 
 - A line starting with `%includes` specifies the files to be included in
-generated source files.
+  generated source files.
 - `%includes` must be followed by a '=' followed by list of header file to
-include, if a header file is a standard header, its name must be followed
-by '\*'.
+  include, if a header file is a standard header, its name must be followed
+  by '\*'.
 - Each line not starting with `%` must describe a single AST class.
 - Lines describing an AST class must start with a name for that AST class.
-- Class name must be followed by a '=' separated by whitespace.
-- Following the '=', a class member list separated from '=' by whitespace must
-describe the members of the AST class on same line.
+- Class name must be followed by '=' separated by whitespace.
+- Following the '=', a class member list, separated from '=' by whitespace,
+  must describe the members of the AST class on same line.
 - Each class member must be described with its type following by member name
-separated by whitespace.
+  separated by whitespace.
 - Each class member in class member list must be separated by ",\<space\>".
-- If a member is a `shared_ptr`, its type must be followed be a '\*'.
+- If a member is a `shared_ptr`, its type must be followed by '\*'.
 - File must not contain any trailing newline character ('\n') at the end.
 
 _expr.txt_ and _stmt.txt_ files required for generating AST classes are

@@ -10,7 +10,7 @@
 
 class Neem_function: public Neem_callable {
   std::shared_ptr<Function> declaration;
-  std::weak_ptr<Environment> closure;
+  std::shared_ptr<Environment> closure_candidate;
   std::string repr {"<fn ?>"};
 public:
   Neem_function(std::shared_ptr<Function>, std::shared_ptr<Environment>);

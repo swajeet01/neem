@@ -11,7 +11,7 @@
 class Environment {
 public:
   Environment() = default;
-  explicit Environment(std::shared_ptr<Environment>);
+  Environment(Environment*);
   void define(const std::string&, const Neem_value&);
   Neem_value get(Token&);
   Neem_value get_at(int, const std::string&);
@@ -19,9 +19,9 @@ public:
   void assign_at(int, Token&, Neem_value&);
   using Value_map = std::unordered_map<std::string, Neem_value>;
 private:
-  std::shared_ptr<Environment> enclosing {nullptr};
+  Environment* enclosing {nullptr};
   Value_map values {};
-  Environment* ancestor(int);
+  Environment& ancestor(int);
 };
 
 #endif // !ENVIRONMENT_H

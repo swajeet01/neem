@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cmath>
 #include <memory>
 #include <iostream>
@@ -20,22 +21,21 @@
 
 Interpreter::Interpreter(Interpreter_error_reporter& perror_reporter):
     error_reporter {perror_reporter},
-    globals {std::make_shared<Environment>()},
-    environment {globals} {
+    environment {&globals} {
 
-  globals->define(
+  globals.define(
     "clock",
     Neem_value {Value_type::NEEM_CALLABLE,
     std::make_shared<Clock>()}
   );
 
-  globals->define(
+  globals.define(
     "str",
     Neem_value {Value_type::NEEM_CALLABLE,
     std::make_shared<Str>()}
   );
 
-  globals->define(
+  globals.define(
     "read",
     Neem_value {Value_type::NEEM_CALLABLE,
     std::make_shared<Read>()}
@@ -255,12 +255,12 @@ void Interpreter::visit(Variable* expr) {
 
 void Interpreter::visit(Assign* expr) {
   Neem_value value = evaluate(expr->value);
-  Locals_map::iterator itr = locals.find(expr);
+  Locals::iterator itr = locals.find(expr);
   if (itr != locals.end()) {
     int distance = itr->second;
     environment->assign_at(distance, expr->name, value);
   } else {
-    globals->assign(expr->name, value);
+    globals.assign(expr->name, value);
   }
   data = value;
 }
@@ -282,7 +282,8 @@ void Interpreter::visit(Logical* expr) {
 }
 
 void Interpreter::visit(Block* stmt) {
-  execute_block(stmt->statements, std::make_shared<Environment>(environment));
+  std::shared_ptr<Environment> local_environment = std::make_shared<Environment>(environment);
+  execute_block(stmt->statements, local_environment);
   data = Neem_value();
 }
 
@@ -309,7 +310,7 @@ void Interpreter::visit(Function* stmt) {
   auto function_cpy =
     std::make_shared<Function>(stmt->name, stmt->params, stmt->body);
   std::shared_ptr<Neem_function> function =
-    std::make_shared<Neem_function>(function_cpy, environment);
+    std::make_shared<Neem_function>(function_cpy, closure_candidate);
   environment->define(stmt->name.lexeme,
                       Neem_value {Value_type::NEEM_CALLABLE, function});
   data = Neem_value {};
@@ -328,12 +329,12 @@ void Interpreter::resolve(Expr* expr, int depth) {
 }
 
 Neem_value Interpreter::lookup_variable(Token& name, Expr* expr) {
-  Locals_map::iterator itr = locals.find(expr);
+  Locals::iterator itr = locals.find(expr);
   if (itr != locals.end()) {
     int distance = itr->second;
     return environment->get_at(distance, name.lexeme);
   } else {
-    return globals->get(name);
+    return globals.get(name);
   }
 }
 
@@ -368,10 +369,12 @@ Interpreter_env_controller::Interpreter_env_controller(Interpreter& p_interprete
                                                        std::shared_ptr<Environment> p_environment):
   interpreter {p_interpreter},
   old_environment {interpreter.environment} {
-  interpreter.environment = p_environment;
+  interpreter.closure_candidate = p_environment;
+  interpreter.environment = p_environment.get();
 }
 
 Interpreter_env_controller::~Interpreter_env_controller() {
   interpreter.environment = old_environment;
+  interpreter.closure_candidate.reset();
 }
 

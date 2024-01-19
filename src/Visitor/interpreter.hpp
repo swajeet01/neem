@@ -15,19 +15,20 @@
 class Interpreter: public Mutable_state_visitor {
 public:
   Interpreter(Interpreter_error_reporter&);
-  std::shared_ptr<Environment> globals;
-  std::shared_ptr<Environment> environment;
+  Environment globals;
+  Environment* environment;
+  std::shared_ptr<Environment> closure_candidate;
   void execute_block(std::vector<std::shared_ptr<Stmt>>&, std::shared_ptr<Environment>);
-  using Locals_map = std::unordered_map<Expr*, int>;
+  using Locals = std::unordered_map<Expr*, int>;
   void interprete(std::vector<std::shared_ptr<Stmt>>&);
   Interpreter_error_reporter& get_error_reporter();
   void resolve(Expr*, int);
 private:
   Interpreter_error_reporter& error_reporter;
-  Locals_map locals;
+  Locals locals;
   Neem_value data;
   bool is_truthy(Neem_value&);
-  bool is_equal(Neem_value& left, Neem_value& right);
+  bool is_equal(Neem_value&, Neem_value&);
   void visit(Binary*) override;
   void visit(Call*) override;
   void visit(Unary*) override;
@@ -51,7 +52,7 @@ private:
 
 struct Interpreter_env_controller {
   Interpreter& interpreter;
-  std::shared_ptr<Environment> old_environment;
+  Environment* old_environment;
   Interpreter_env_controller(Interpreter&, std::shared_ptr<Environment>);
   ~Interpreter_env_controller();
 };

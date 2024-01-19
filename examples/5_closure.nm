@@ -1,0 +1,16 @@
+fn makeCounter(initial) {
+  let curr = initial;
+  fn counter() {
+    let prev = curr;
+    curr = curr + 1;
+    return prev;
+  }
+  return counter;
+}
+
+let counter = makeCounter(1);
+
+print counter();  %% 1
+print counter();  %% 2
+print counter();  %% 3
+print counter();  %% 4

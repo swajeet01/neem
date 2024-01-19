@@ -7,7 +7,7 @@
 #include "Variant/neem_value.hpp"
 #include "environment.hpp"
 
-Environment::Environment(std::shared_ptr<Environment> p_enclosing):
+Environment::Environment(Environment* p_enclosing):
     enclosing {p_enclosing} { }
 
 void Environment::define(const std::string& name, const Neem_value& value) {
@@ -26,7 +26,7 @@ Neem_value Environment::get(Token& name) {
 }
 
 Neem_value Environment::get_at(int distance, const std::string& name) {
-  Value_map& values = ancestor(distance)->values;
+  Value_map& values = ancestor(distance).values;
   Value_map::iterator itr = values.find(name);
   if (itr != values.end()) {
     return itr->second;
@@ -34,12 +34,12 @@ Neem_value Environment::get_at(int distance, const std::string& name) {
   return Neem_value {};
 }
 
-Environment* Environment::ancestor(int distance) {
+Environment& Environment::ancestor(int distance) {
   Environment* environment {this};
   for (int i = 0; i < distance; i++) {
-    environment = environment->enclosing.get();
+    environment = environment->enclosing;
   }
-  return environment;
+  return *environment;
 }
 
 void Environment::assign(Token& name, Neem_value& value) {
@@ -57,6 +57,6 @@ void Environment::assign(Token& name, Neem_value& value) {
 
 
 void Environment::assign_at(int distance, Token& name, Neem_value& value) {
-  Value_map& values = ancestor(distance)->values;
+  Value_map& values = ancestor(distance).values;
   values[name.lexeme] = value;
 }
