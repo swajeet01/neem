@@ -13,6 +13,6 @@ This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it under
 certain conditions. See <https://www.gnu.org/licenses/>.)";
 
-};
+}
 
 #endif // !COMMON_H

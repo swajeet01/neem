@@ -24,10 +24,10 @@ class Lexer {
   void identifier();
   void get_token();
   void add_token(Token_type);
-  void add_token(Token_type, Literal);
+  void add_token(Token_type, const Literal&);
   char advance();
 public:
-  Lexer(const std::string&, Lexer_error_reporter&);
+  Lexer(std::string , Lexer_error_reporter&);
   bool is_at_end();
   std::vector<Token> get_tokens();
 };

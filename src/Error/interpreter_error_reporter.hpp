@@ -11,8 +11,8 @@ class Interpreter_error_reporter: public Error_reporter {
   bool fhad_error;
 public:
   void error(Neem_runtime_error&);
-  void report(int, std::string, std::string);
-  bool had_error();
+  void report(size_t, std::string, std::string) override;
+  bool had_error() override;
 };
 
 #endif // !INTERPRETER_ERROR_REPORTER_H

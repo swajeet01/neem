@@ -5,7 +5,7 @@
 #include "neem_runtime_error.hpp"
 #include "interpreter_error_reporter.hpp"
 
-void Interpreter_error_reporter::report(int line, std::string where,
+void Interpreter_error_reporter::report(size_t line, std::string where,
     std::string message) {
   std::cerr << line << "| Runtime error: " << message << common::newl;
   fhad_error = true;

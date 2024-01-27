@@ -83,8 +83,8 @@ def generate_class_decl(klass, base, writer):
     writer.writeln(f"struct {klass.name}: public {base} {{")
     for member in klass.members:
         writer.writeln(f"{tabs(1)}{get_parameter_type(member)} {member.mname};")
-    writer.writeln(f"{tabs(1)}{klass.name}({parameters});")
-    writer.writeln(f"{tabs(1)}void accept(Mutable_state_visitor&);")
+    writer.writeln(f"{tabs(1)}explicit {klass.name}({parameters});")
+    writer.writeln(f"{tabs(1)}void accept(Mutable_state_visitor&) override;")
     writer.writeln("};")
     writer.emmit_blank()
 
@@ -106,7 +106,7 @@ def generate_header_file(includes, klasses, base, writer):
     writer.emmit_blank()
     writer.writeln(f"struct {base} {{")
     writer.writeln(f"{tabs(1)}virtual void accept(Mutable_state_visitor&) = 0;")
-    writer.writeln(f"{tabs(1)}virtual ~{base}() {{}};")
+    writer.writeln(f"{tabs(1)}virtual ~{base}() = default;")
     writer.writeln("};")
     writer.emmit_blank()
     for klass in klasses:
@@ -120,7 +120,7 @@ def get_parameter(member):
 def generate_class_impl(klass, base, writer):
     parameters = ", ".join(map(get_parameter, klass.members))
     writer.writeln(f"{klass.name}::{klass.name}({parameters}):")
-    initializer = ", ".join(map(lambda member: f"{member.mname} {{p_{member.mname}}}", klass.members))
+    initializer = ", ".join(map(lambda member: f"{member.mname} {{std::move(p_{member.mname})}}", klass.members))
     writer.writeln(f"{tabs(1)}{initializer} {{}}")
     writer.emmit_blank()
     writer.writeln(f"void {klass.name}::accept(Mutable_state_visitor& visitor) {{")

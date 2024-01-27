@@ -1,14 +1,15 @@
 #include <iostream>
 #include <string>
+#include <utility>
 
 #include "common.hpp"
 #include "lexer_error_reporter.hpp"
 
-void Lexer_error_reporter::error(int line, std::string message) {
-  report(line, "", message);
+void Lexer_error_reporter::error(size_t line, std::string message) {
+  report(line, "", std::move(message));
 }
 
-void Lexer_error_reporter::report(int line, std::string where,
+void Lexer_error_reporter::report(size_t line, std::string where,
   std::string message) {
   std::cerr << line << "| Scan error: " << message << common::newl;
   mhad_error = true;

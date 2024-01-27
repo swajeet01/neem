@@ -14,11 +14,11 @@
 
 class Interpreter: public Mutable_state_visitor {
 public:
-  Interpreter(Interpreter_error_reporter&);
+  explicit Interpreter(Interpreter_error_reporter&);
   Environment globals;
   Environment* environment;
   std::shared_ptr<Environment> closure_candidate;
-  void execute_block(std::vector<std::shared_ptr<Stmt>>&, std::shared_ptr<Environment>);
+  void execute_block(std::vector<std::shared_ptr<Stmt>>&, const std::shared_ptr<Environment>&);
   using Locals = std::unordered_map<Expr*, int>;
   void interprete(std::vector<std::shared_ptr<Stmt>>&);
   Interpreter_error_reporter& get_error_reporter();
@@ -27,8 +27,8 @@ private:
   Interpreter_error_reporter& error_reporter;
   Locals locals;
   Neem_value data;
-  bool is_truthy(Neem_value&);
-  bool is_equal(Neem_value&, Neem_value&);
+  static bool is_truthy(Neem_value&);
+  static bool is_equal(Neem_value&, Neem_value&);
   void visit(Binary*) override;
   void visit(Call*) override;
   void visit(Unary*) override;
@@ -45,7 +45,7 @@ private:
   void visit(While*) override;
   void visit(Function*) override;
   void visit(Return*) override;
-  Neem_value evaluate(std::shared_ptr<Expr>);
+  Neem_value evaluate(const std::shared_ptr<Expr>&);
   void execute(std::shared_ptr<Stmt>&);
   Neem_value lookup_variable(Token&, Expr*);
 };
@@ -53,12 +53,13 @@ private:
 struct Interpreter_env_controller {
   Interpreter& interpreter;
   Environment* old_environment;
-  Interpreter_env_controller(Interpreter&, std::shared_ptr<Environment>);
+  Interpreter_env_controller(Interpreter&, const std::shared_ptr<Environment>&);
   ~Interpreter_env_controller();
 };
 
-struct Return_hack {
+struct Return_hack: public std::exception {
   Neem_value value;
+  explicit Return_hack(Neem_value );
 };
 
 #endif // !INTERPRETER_H

@@ -8,7 +8,6 @@
 #include "Ast/expr.hpp"
 #include "Ast/stmt.hpp"
 #include "Token/token_type.hpp"
-#include "Variant/neem_value.hpp"
 #include "parser.hpp"
 
 Parser::Parser(const std::vector<Token>& p_tokens,
@@ -60,20 +59,22 @@ void Parser::synchronize() {
       case Token_type::WHILE:
       case Token_type::PRINT:
       case Token_type::RETURN:
-      return;
+        return;
+      default:
+        break;
     }
     advance();
   }
 }
 
 Parse_error Parser::error(const Token& token,
-    const std::string message) {
+    const std::string& message) {
   error_reporter.error(token, message);
   return Parse_error {"Parse error."};
 }
 
 const Token& Parser::consume(Token_type type,
-    const std::string message) {
+    const std::string& message) {
   if (check(type)) return advance();
   throw error(peek(), message);
 }
@@ -116,7 +117,7 @@ std::shared_ptr<Expr> Parser::primary() {
   throw error(peek(), "Expect expression.");
 }
 
-std::shared_ptr<Expr> Parser::finish_call(std::shared_ptr<Expr> callee) {
+std::shared_ptr<Expr> Parser::finish_call(const std::shared_ptr<Expr>& callee) {
   std::vector<std::shared_ptr<Expr>> arguments;
   if (!check(Token_type::RIGHT_PAREN)) {
     do {
@@ -373,7 +374,7 @@ std::shared_ptr<Stmt> Parser::declaration() {
   }
 }
 
-std::shared_ptr<Function> Parser::function(std::string kind) {
+std::shared_ptr<Function> Parser::function(const std::string& kind) {
   std::ostringstream iden_composer;
   iden_composer << "Expected " << kind << " name.";
   Token name = consume(Token_type::IDENTIFIER, iden_composer.str());

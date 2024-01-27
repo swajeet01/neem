@@ -10,8 +10,8 @@
 class Parser_error_reporter: public Error_reporter {
   bool mhad_error;
 public:
-  void error(const Token&, std::string);
-  void report(int, std::string, std::string) override;
+  void error(const Token&, const std::string&);
+  void report(size_t, std::string, std::string) override;
   bool had_error() override;
 };
 

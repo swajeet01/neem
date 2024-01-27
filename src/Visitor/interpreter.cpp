@@ -3,8 +3,8 @@
 #include <memory>
 #include <iostream>
 #include <sstream>
-#include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "Ast/expr.hpp"
@@ -70,6 +70,8 @@ void Interpreter::visit(Ast_literal* expr) {
       break;
     case Literal_type::NIL:
       data = Neem_value();
+      break;
+    default:
       break;
   }
 }
@@ -172,7 +174,7 @@ void Interpreter::visit(Call* expr) {
   }
 
   std::vector<Neem_value> arguments;
-  for (auto argument: expr->arguments) {
+  for (const auto& argument: expr->arguments) {
     arguments.push_back(evaluate(argument));
   }
 
@@ -186,7 +188,7 @@ void Interpreter::visit(Call* expr) {
   data = function->call(*this, arguments);
 }
 
-Neem_value Interpreter::evaluate(std::shared_ptr<Expr> expr) {
+Neem_value Interpreter::evaluate(const std::shared_ptr<Expr>& expr) {
   expr->accept(*this);
   // Neem_value evaluated = data;
   // data.clear();
@@ -255,7 +257,7 @@ void Interpreter::visit(Variable* expr) {
 
 void Interpreter::visit(Assign* expr) {
   Neem_value value = evaluate(expr->value);
-  Locals::iterator itr = locals.find(expr);
+  auto itr = locals.find(expr);
   if (itr != locals.end()) {
     int distance = itr->second;
     environment->assign_at(distance, expr->name, value);
@@ -329,7 +331,7 @@ void Interpreter::resolve(Expr* expr, int depth) {
 }
 
 Neem_value Interpreter::lookup_variable(Token& name, Expr* expr) {
-  Locals::iterator itr = locals.find(expr);
+  auto itr = locals.find(expr);
   if (itr != locals.end()) {
     int distance = itr->second;
     return environment->get_at(distance, name.lexeme);
@@ -339,7 +341,7 @@ Neem_value Interpreter::lookup_variable(Token& name, Expr* expr) {
 }
 
 void Interpreter::execute_block(std::vector<std::shared_ptr<Stmt>>& statements,
-                                std::shared_ptr<Environment> p_environment) {
+                                const std::shared_ptr<Environment>& p_environment) {
   try {
     Interpreter_env_controller executor {*this, p_environment};
     for (std::shared_ptr<Stmt>& statement: statements) {
@@ -365,8 +367,10 @@ void Interpreter::interprete(std::vector<std::shared_ptr<Stmt>>& statements) {
   }
 }
 
+Return_hack::Return_hack(Neem_value val): value {std::move(val)} {}
+
 Interpreter_env_controller::Interpreter_env_controller(Interpreter& p_interpreter,
-                                                       std::shared_ptr<Environment> p_environment):
+                                                       const std::shared_ptr<Environment>& p_environment):
   interpreter {p_interpreter},
   old_environment {interpreter.environment} {
   interpreter.closure_candidate = p_environment;

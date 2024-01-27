@@ -9,7 +9,7 @@
 
 class Token {
 public:
-  Token(const std::string, int, Token_type, Literal);
+  Token(std::string , int, Token_type, Literal);
   int line;
   Literal literal;
   Token_type type;

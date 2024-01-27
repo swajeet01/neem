@@ -16,19 +16,19 @@ class Neem_value {
 public:
   Neem_value();
   Neem_value(Value_type, double);
-  Neem_value(Value_type, std::string);
+  Neem_value(Value_type, const std::string&);
   Neem_value(Value_type, bool);
-  Neem_value(Value_type, std::shared_ptr<Neem_callable>);
+  Neem_value(Value_type, const std::shared_ptr<Neem_callable>&);
 
   Value_type get_type();
   std::string get_string();
   double get_number();
   bool get_bool();
   std::shared_ptr<Neem_callable> get_callable();
-  void put_string(std::string);
+  void put_string(const std::string&);
   void put_number(double);
   void put_bool(bool);
-  void put_callable(std::shared_ptr<Neem_callable>);
+  void put_callable(const std::shared_ptr<Neem_callable>&);
   std::string to_string();
 };
 

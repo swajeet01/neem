@@ -22,7 +22,7 @@ struct Mutable_state_visitor {
   virtual void visit(While*) = 0;
   virtual void visit(Function*) = 0;
   virtual void visit(Return*) = 0;
-  virtual ~Mutable_state_visitor() { }
+  virtual ~Mutable_state_visitor() = default;
 };
 
 #endif // !MUTABLE_STATE_VISITOR_H

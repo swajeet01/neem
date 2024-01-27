@@ -5,7 +5,7 @@
 #include <string>
 
 struct Parse_error: public std::runtime_error {
-  Parse_error(const std::string);
+  explicit Parse_error(const std::string&);
 };
 
 #endif // !PARSE_ERROR_H

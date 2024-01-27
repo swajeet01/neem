@@ -1,14 +1,12 @@
 #include <cctype>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
-#include <memory>
-#include <iostream>
 
 #include "common.hpp"
 #include "Token/token.hpp"
 #include "Token/token_type.hpp"
-#include "Error/error_reporter.hpp"
 #include "Variant/literal.hpp"
 #include "lexer.hpp"
 
@@ -33,9 +31,9 @@ static const std::unordered_map<std::string, Token_type> keywords {
   {"print", Token_type::PRINT}
 };
 
-Lexer::Lexer(const std::string& psource,
+Lexer::Lexer(std::string  psource,
             Lexer_error_reporter& perror_reporter):
-    source {psource},
+    source {std::move(psource)},
     error_reporter {perror_reporter} {}
 
 inline bool Lexer::is_at_end() {
@@ -51,9 +49,9 @@ void Lexer::add_token(Token_type type) {
   add_token(type, Literal());
 }
 
-void Lexer::add_token(Token_type type, Literal literal) {
+void Lexer::add_token(Token_type type, const Literal& literal) {
   auto lexeme = source.substr(start, current - start); // Already 1 char ahead.
-  tokens.push_back(Token(lexeme, line, type, literal));
+  tokens.emplace_back(lexeme, line, type, literal);
 }
 
 char Lexer::peek() {
@@ -196,7 +194,7 @@ std::vector<Token> Lexer::get_tokens() {
     start = current;
     get_token();
   }
-  tokens.push_back(Token(std::string {"EOF"}, line, Token_type::NEOF,
-      Literal()));
+  tokens.emplace_back(std::string {"EOF"}, line, Token_type::NEOF,
+      Literal());
   return tokens;
 }

@@ -14,62 +14,62 @@
 
 struct Stmt {
 	virtual void accept(Mutable_state_visitor&) = 0;
-	virtual ~Stmt() {};
+	virtual ~Stmt() = default;
 };
 
 struct Block: public Stmt {
 	std::vector<std::shared_ptr<Stmt>> statements;
-	Block(std::vector<std::shared_ptr<Stmt>>);
-	void accept(Mutable_state_visitor&);
+	explicit Block(std::vector<std::shared_ptr<Stmt>>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Expression: public Stmt {
 	std::shared_ptr<Expr> expression;
-	Expression(std::shared_ptr<Expr>);
-	void accept(Mutable_state_visitor&);
+	explicit Expression(std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Function: public Stmt {
 	Token name;
 	std::vector<Token> params;
 	std::vector<std::shared_ptr<Stmt>> body;
-	Function(Token, std::vector<Token>, std::vector<std::shared_ptr<Stmt>>);
-	void accept(Mutable_state_visitor&);
+	explicit Function(Token, std::vector<Token>, std::vector<std::shared_ptr<Stmt>>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Return: public Stmt {
 	Token keyword;
 	std::shared_ptr<Expr> value;
-	Return(Token, std::shared_ptr<Expr>);
-	void accept(Mutable_state_visitor&);
+	explicit Return(Token, std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct If: public Stmt {
 	std::shared_ptr<Expr> condition;
 	std::shared_ptr<Stmt> then_branch;
 	std::shared_ptr<Stmt> else_branch;
-	If(std::shared_ptr<Expr>, std::shared_ptr<Stmt>, std::shared_ptr<Stmt>);
-	void accept(Mutable_state_visitor&);
+	explicit If(std::shared_ptr<Expr>, std::shared_ptr<Stmt>, std::shared_ptr<Stmt>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Print: public Stmt {
 	std::shared_ptr<Expr> expression;
-	Print(std::shared_ptr<Expr>);
-	void accept(Mutable_state_visitor&);
+	explicit Print(std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Var: public Stmt {
 	Token name;
 	std::shared_ptr<Expr> initializer;
-	Var(Token, std::shared_ptr<Expr>);
-	void accept(Mutable_state_visitor&);
+	explicit Var(Token, std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct While: public Stmt {
 	std::shared_ptr<Expr> condition;
 	std::shared_ptr<Stmt> body;
-	While(std::shared_ptr<Expr>, std::shared_ptr<Stmt>);
-	void accept(Mutable_state_visitor&);
+	explicit While(std::shared_ptr<Expr>, std::shared_ptr<Stmt>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 

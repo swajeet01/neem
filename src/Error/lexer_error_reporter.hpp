@@ -8,8 +8,8 @@
 class Lexer_error_reporter: public Error_reporter {
   bool mhad_error;
 public:
-  void error(int, std::string);
-  void report(int, std::string, std::string) override;
+  void error(size_t, std::string);
+  void report(size_t, std::string, std::string) override;
   bool had_error() override;
 };
 

@@ -1,14 +1,13 @@
-#include <memory>
 #include <string>
+#include <utility>
 
-#include "common.hpp"
 #include "token_type.hpp"
 #include "Variant/literal.hpp"
 #include "token.hpp"
 
-Token::Token(const std::string plexeme, int pline, Token_type ptype,
+Token::Token(std::string  plexeme, int pline, Token_type ptype,
     Literal pliteral):
-    lexeme {plexeme}, line {pline}, type {ptype}, literal {pliteral} { }
+    lexeme {std::move(plexeme)}, line {pline}, type {ptype}, literal {std::move(pliteral)} { }
 
 std::string Token::to_string() {
   auto str = "Token '" + lexeme + "' ";

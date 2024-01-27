@@ -24,8 +24,8 @@ class Parser {
   const Token& advance();
   const Token& peek();
   bool is_at_end();
-  const Token& consume(Token_type, const std::string);
-  Parse_error error(const Token&, const std::string message);
+  const Token& consume(Token_type, const std::string&);
+  Parse_error error(const Token&, const std::string&);
   void synchronize();
   std::shared_ptr<Expr> expression();
   std::shared_ptr<Expr> assignment();
@@ -33,7 +33,7 @@ class Parser {
   std::shared_ptr<Expr> term();
   std::shared_ptr<Expr> factor();
   std::shared_ptr<Expr> unary();
-  std::shared_ptr<Expr> finish_call(std::shared_ptr<Expr>);
+  std::shared_ptr<Expr> finish_call(const std::shared_ptr<Expr>&);
   std::shared_ptr<Expr> call();
   std::shared_ptr<Expr> primary();
   std::shared_ptr<Expr> logical_or();
@@ -47,7 +47,7 @@ class Parser {
   std::shared_ptr<Stmt> return_statement();
   std::shared_ptr<Stmt> declaration();
   std::shared_ptr<Stmt> var_declaration();
-  std::shared_ptr<Function> function(std::string);
+  std::shared_ptr<Function> function(const std::string&);
   std::vector<std::shared_ptr<Stmt>> block_statement();
 public:
   Parser(const std::vector<Token>&, Parser_error_reporter&);

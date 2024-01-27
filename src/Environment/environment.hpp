@@ -11,7 +11,7 @@
 class Environment {
 public:
   Environment() = default;
-  Environment(Environment*);
+  explicit Environment(Environment*);
   void define(const std::string&, const Neem_value&);
   Neem_value get(Token&);
   Neem_value get_at(int, const std::string&);

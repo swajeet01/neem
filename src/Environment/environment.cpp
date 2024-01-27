@@ -1,5 +1,3 @@
-#include <iostream>
-#include <memory>
 #include <string>
 
 #include "Error/neem_runtime_error.hpp"
@@ -15,7 +13,7 @@ void Environment::define(const std::string& name, const Neem_value& value) {
 }
 
 Neem_value Environment::get(Token& name) {
-  Value_map::iterator itr = values.find(name.lexeme);
+  auto itr = values.find(name.lexeme);
   if (itr != values.end()) {
     return itr->second;
   }
@@ -27,7 +25,7 @@ Neem_value Environment::get(Token& name) {
 
 Neem_value Environment::get_at(int distance, const std::string& name) {
   Value_map& values = ancestor(distance).values;
-  Value_map::iterator itr = values.find(name);
+  auto itr = values.find(name);
   if (itr != values.end()) {
     return itr->second;
   }
@@ -43,7 +41,7 @@ Environment& Environment::ancestor(int distance) {
 }
 
 void Environment::assign(Token& name, Neem_value& value) {
-  Value_map::iterator itr = values.find(name.lexeme);
+  auto itr = values.find(name.lexeme);
   if (itr != values.end()) {
     itr->second = value;
     return;

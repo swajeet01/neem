@@ -16,7 +16,7 @@ enum class Function_type { NONE, FUNCTION };
 class Resolver: public Mutable_state_visitor {
 public:
   using Map = std::unordered_map<std::string, bool>;
-  Resolver(Interpreter&);
+  explicit Resolver(Interpreter&);
   void resolve(std::vector<std::shared_ptr<Stmt>>&);
 private:
   Interpreter& interpreter;

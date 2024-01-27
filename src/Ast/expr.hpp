@@ -14,63 +14,63 @@
 
 struct Expr {
 	virtual void accept(Mutable_state_visitor&) = 0;
-	virtual ~Expr() {};
+	virtual ~Expr() = default;
 };
 
 struct Assign: public Expr {
 	Token name;
 	std::shared_ptr<Expr> value;
-	Assign(Token, std::shared_ptr<Expr>);
-	void accept(Mutable_state_visitor&);
+	explicit Assign(Token, std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Binary: public Expr {
 	std::shared_ptr<Expr> left;
 	Token op;
 	std::shared_ptr<Expr> right;
-	Binary(std::shared_ptr<Expr>, Token, std::shared_ptr<Expr>);
-	void accept(Mutable_state_visitor&);
+	explicit Binary(std::shared_ptr<Expr>, Token, std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Call: public Expr {
 	std::shared_ptr<Expr> callee;
 	Token paren;
 	std::vector<std::shared_ptr<Expr>> arguments;
-	Call(std::shared_ptr<Expr>, Token, std::vector<std::shared_ptr<Expr>>);
-	void accept(Mutable_state_visitor&);
+	explicit Call(std::shared_ptr<Expr>, Token, std::vector<std::shared_ptr<Expr>>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Grouping: public Expr {
 	std::shared_ptr<Expr> expr;
-	Grouping(std::shared_ptr<Expr>);
-	void accept(Mutable_state_visitor&);
+	explicit Grouping(std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Unary: public Expr {
 	Token op;
 	std::shared_ptr<Expr> right;
-	Unary(Token, std::shared_ptr<Expr>);
-	void accept(Mutable_state_visitor&);
+	explicit Unary(Token, std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Ast_literal: public Expr {
 	Literal value;
-	Ast_literal(Literal);
-	void accept(Mutable_state_visitor&);
+	explicit Ast_literal(Literal);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Logical: public Expr {
 	std::shared_ptr<Expr> left;
 	Token op;
 	std::shared_ptr<Expr> right;
-	Logical(std::shared_ptr<Expr>, Token, std::shared_ptr<Expr>);
-	void accept(Mutable_state_visitor&);
+	explicit Logical(std::shared_ptr<Expr>, Token, std::shared_ptr<Expr>);
+	void accept(Mutable_state_visitor&) override;
 };
 
 struct Variable: public Expr {
 	Token name;
-	Variable(Token);
-	void accept(Mutable_state_visitor&);
+	explicit Variable(Token);
+	void accept(Mutable_state_visitor&) override;
 };
 
 

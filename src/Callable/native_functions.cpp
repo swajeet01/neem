@@ -5,7 +5,6 @@
 
 #include "Variant/neem_value.hpp"
 #include "Visitor/interpreter.hpp"
-#include "common.hpp"
 #include "Callable/native_functions.hpp"
 
 int Clock::arity() { return 0; }
@@ -16,7 +15,7 @@ Neem_value Clock::call(Interpreter& interpreter,
   auto since_epoch = time.time_since_epoch();
   auto milis =
     std::chrono::duration_cast<std::chrono::milliseconds>(since_epoch);
-  double now = milis.count();
+  auto now = static_cast<double>(milis.count());
   return Neem_value {Value_type::NUMBER, now};
 }
 

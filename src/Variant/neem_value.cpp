@@ -19,7 +19,7 @@ Neem_value::Neem_value(Value_type ptype, double pnum) {
   data = pnum;
 }
 
-Neem_value::Neem_value(Value_type ptype, std::string pstr) {
+Neem_value::Neem_value(Value_type ptype, const std::string& pstr) {
   if (ptype != Value_type::STRING) {
     throw std::runtime_error {"[Internal] Expected Value_type 'STRING'."};
   }
@@ -36,7 +36,7 @@ Neem_value::Neem_value(Value_type ptype, bool pbool) {
   data = pbool;
 }
 
-Neem_value::Neem_value(Value_type ptype, std::shared_ptr<Neem_callable> callable) {
+Neem_value::Neem_value(Value_type ptype, const std::shared_ptr<Neem_callable>& callable) {
   if (ptype != Value_type::NEEM_CALLABLE) {
     throw std::runtime_error {"[Internal] Expected Value_type 'NEEM_CALLABLE'."};
   }
@@ -80,7 +80,7 @@ std::shared_ptr<Neem_callable> Neem_value::get_callable() {
   return std::get<std::shared_ptr<Neem_callable>>(data);
 }
 
-void Neem_value::put_string(std::string str) {
+void Neem_value::put_string(const std::string& str) {
   type = Value_type::STRING;
   data = str;
 }
@@ -95,7 +95,7 @@ void Neem_value::put_bool(bool b00l) {
   data = b00l;
 }
 
-void Neem_value::put_callable(std::shared_ptr<Neem_callable> callable) {
+void Neem_value::put_callable(const std::shared_ptr<Neem_callable>& callable) {
   type = Value_type::NEEM_CALLABLE;
   data = callable;
 }

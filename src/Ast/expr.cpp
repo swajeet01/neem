@@ -12,56 +12,56 @@
 #include "Ast/expr.hpp"
 
 Assign::Assign(Token p_name, std::shared_ptr<Expr> p_value):
-	name {p_name}, value {p_value} {}
+	name {std::move(p_name)}, value {std::move(p_value)} {}
 
 void Assign::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(this);
 }
 
 Binary::Binary(std::shared_ptr<Expr> p_left, Token p_op, std::shared_ptr<Expr> p_right):
-	left {p_left}, op {p_op}, right {p_right} {}
+	left {std::move(p_left)}, op {std::move(p_op)}, right {std::move(p_right)} {}
 
 void Binary::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(this);
 }
 
 Call::Call(std::shared_ptr<Expr> p_callee, Token p_paren, std::vector<std::shared_ptr<Expr>> p_arguments):
-	callee {p_callee}, paren {p_paren}, arguments {p_arguments} {}
+	callee {std::move(p_callee)}, paren {std::move(p_paren)}, arguments {std::move(p_arguments)} {}
 
 void Call::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(this);
 }
 
 Grouping::Grouping(std::shared_ptr<Expr> p_expr):
-	expr {p_expr} {}
+	expr {std::move(p_expr)} {}
 
 void Grouping::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(this);
 }
 
 Unary::Unary(Token p_op, std::shared_ptr<Expr> p_right):
-	op {p_op}, right {p_right} {}
+	op {std::move(p_op)}, right {std::move(p_right)} {}
 
 void Unary::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(this);
 }
 
 Ast_literal::Ast_literal(Literal p_value):
-	value {p_value} {}
+	value {std::move(p_value)} {}
 
 void Ast_literal::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(this);
 }
 
 Logical::Logical(std::shared_ptr<Expr> p_left, Token p_op, std::shared_ptr<Expr> p_right):
-	left {p_left}, op {p_op}, right {p_right} {}
+	left {std::move(p_left)}, op {std::move(p_op)}, right {std::move(p_right)} {}
 
 void Logical::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(this);
 }
 
 Variable::Variable(Token p_name):
-	name {p_name} {}
+	name {std::move(p_name)} {}
 
 void Variable::accept(Mutable_state_visitor& visitor) {
 	visitor.visit(this);

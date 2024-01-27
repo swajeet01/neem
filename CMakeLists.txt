@@ -55,7 +55,6 @@ target_sources(native_functions
   PRIVATE
   src/Variant/neem_value.hpp
   src/Visitor/interpreter.hpp
-  src/common.hpp
   src/Callable/native_functions.hpp
   src/Callable/native_functions.cpp
 )
@@ -64,7 +63,6 @@ target_sources(neem_function
   PRIVATE
   src/Ast/stmt.hpp
   src/Environment/environment.hpp
-  src/Error/neem_runtime_error.hpp
   src/Variant/neem_value.hpp
   src/Visitor/interpreter.hpp
   src/Callable/neem_function.hpp
@@ -120,7 +118,6 @@ target_sources(lexer
   src/common.hpp
   src/Token/token.hpp
   src/Token/token_type.hpp
-  src/Error/error_reporter.hpp
   src/Variant/literal.hpp
   src/Lexer/lexer.hpp
   src/Lexer/lexer.cpp
@@ -132,14 +129,12 @@ target_sources(parser
   src/Ast/expr.hpp
   src/Ast/stmt.hpp
   src/Token/token_type.hpp
-  src/Variant/neem_value.hpp
   src/Parser/parser.hpp
   src/Parser/parser.cpp
 )
 
 target_sources(token
   PRIVATE
-  src/common.hpp
   src/Token/token_type.hpp
   src/Variant/literal.hpp
   src/Token/token.hpp

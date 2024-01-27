@@ -22,7 +22,6 @@
 #include <fstream>
 #include <vector>
 
-#include "Error/error_reporter.hpp"
 #include "Error/interpreter_error_reporter.hpp"
 #include "Error/lexer_error_reporter.hpp"
 #include "Error/parser_error_reporter.hpp"

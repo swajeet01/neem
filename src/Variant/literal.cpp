@@ -17,7 +17,7 @@ Literal::Literal(Literal_type ptype, double pnum) {
   data = pnum;
 }
 
-Literal::Literal(Literal_type ptype, std::string pstr) {
+Literal::Literal(Literal_type ptype, const std::string& pstr) {
   if (ptype != Literal_type::STRING) {
       throw std::runtime_error {"Expected Literal_type 'STRING'."};
   }
@@ -69,7 +69,7 @@ bool Literal::get_bool() {
   return std::get<bool>(data);
 }
 
-void Literal::put_string(std::string str) {
+void Literal::put_string(const std::string& str) {
   type = Literal_type::STRING;
   data = str;
 }

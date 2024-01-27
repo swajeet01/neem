@@ -1,6 +1,5 @@
 #include <memory>
 #include <vector>
-#include <iostream>
 
 #include "Ast/expr.hpp"
 #include "Ast/stmt.hpp"
@@ -56,11 +55,12 @@ void Resolver::define(Token& name) {
 }
 
 void Resolver::resolve_local(Expr* expr, Token& name) {
-  for (int i = scopes.size() - 1; i >= 0; i--) {
+  auto scopes_size = static_cast<int>(scopes.size());
+  for (int i = scopes_size - 1; i >= 0; i--) {
     Map& scope = scopes[i];
-    Map::iterator itr = scope.find(name.lexeme);
+    auto itr = scope.find(name.lexeme);
     if (itr != scope.end()) {
-      interpreter.resolve(expr, scopes.size() - 1 - i);
+      interpreter.resolve(expr, scopes_size - 1 - i);
       return;
     }
   }
@@ -108,8 +108,8 @@ void Resolver::visit(Variable* expr) {
   if (!scopes.empty()) {
     // scopes.back().at(expr->name.lexeme) == false)
     Map& scope = scopes.back();
-    Map::iterator itr = scope.find(expr->name.lexeme); 
-    if ((itr != scope.end()) && itr->second == false) {
+    auto itr = scope.find(expr->name.lexeme);
+    if ((itr != scope.end()) && !itr->second) {
       Neem_runtime_error error {expr->name,
         "Can't read local variable in its own initializer."};
       interpreter.get_error_reporter().error(error);

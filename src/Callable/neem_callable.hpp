@@ -14,7 +14,7 @@ public:
   virtual Neem_value call(Interpreter&,
                           std::vector<Neem_value>) = 0;
   virtual std::string to_string() = 0;
-  ~Neem_callable() { }
+  ~Neem_callable() = default;
 };
 
 #endif // !NEEM_CALLABLE_H
